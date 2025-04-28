@@ -11,6 +11,9 @@ import { AfterViewInit } from '@angular/core';
 })
 export class HomePage implements AfterViewInit {
   
+  constructor(private apiService: ApiService) { } // Inyectamos el ApiService
+
+
   ngAfterViewInit() {
     // Aquí puedes acceder al DOM después de que el componente se haya renderizado completamente.
     const element = document.getElementById('container');
