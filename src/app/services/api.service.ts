@@ -22,6 +22,112 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   // Endpoints del Servicio
+  getNamesMathGenious() : Observable< string[]>{
+    // URL completa
+    //https://es.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Categorías_de_matemáticos&format=json&cmtype=subcat
+
+    // Parámetros esenciales de la URL
+    const params = new HttpParams()
+    .set('action', 'query')
+    .set('list', 'categorymembers')
+    .set('cmtitle', 'Category:Categorías_de_matemáticos')
+    .set('format', 'json')
+    .set('cmtype', 'subcat');
+
+    return this.http.get<any>(this.baseURL, { params }).pipe(
+      map(response => {
+      // Obtener la lista de miembros de la categoría (subcategorías de matemáticos)
+      const categoryMembers = response?.query?.categorymembers;
+
+      // categoryMembers es un array de objetos literales, dentro de ellos hay una key title
+      // que contiene el nombre de cada matemático
+
+      if(Array.isArray(categoryMembers)){
+        return categoryMembers.map(member => member.title);
+      }else{
+        return [];
+      }
+  
+      }),
+      catchError(err => {
+        console.error('Error al obtener los nombres de los matemáticos:', err);
+        return of([]);
+      })
+    );
+
+  }
+
+  getNamesPhysicGenious() : Observable<string []>{
+
+    // URL completa
+    //https://es.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Categor%C3%ADas_de_f%C3%ADsicos&format=json&cmtype=subcat
+  
+    // Parámetros esenciales de la URL
+    const params = new HttpParams()
+    .set('action', 'query')
+    .set('list', 'categorymembers')
+    .set('cmtitle', 'Category:Categor%C3%ADas_de_f%C3%ADsicos')
+    .set('format', 'json')
+    .set('cmtype', 'subcat');
+
+    return this.http.get<any>(this.baseURL, { params }).pipe(
+    map(response => {
+    // Obtener la lista de miembros de la categoría (subcategorías de físicos)
+    const categoryMembers = response?.query?.categorymembers;
+
+    // categoryMembers es un array de objetos literales, dentro de ellos hay una key title
+    // que contiene el nombre de cada físico
+
+    if(Array.isArray(categoryMembers)){
+      return categoryMembers.map(member => member.title);
+    }else{
+      return [];
+    }
+
+    }),
+    catchError(err => {
+      console.error('Error al obtener los nombres de los físicos:', err);
+      return of([]);
+    })
+    );
+  }
+
+  getNamesInformaticGenious() : Observable<string []>{
+
+    // URL completa
+    //https://es.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Pioneras_de_la_inform%C3%A1tica&format=json
+
+
+    // Parámetros esenciales de la URL
+    const params = new HttpParams()
+    .set('action', 'query')
+    .set('list', 'categorymembers')
+    .set('cmtitle', 'Category:Pioneras_de_la_inform%C3%A1tica')
+    .set('format', 'json');
+
+    return this.http.get<any>(this.baseURL, { params }).pipe(
+    map(response => {
+    // Obtener la lista de miembros de la categoría (subcategorías de informáticas)
+    const categoryMembers = response?.query?.categorymembers;
+
+    // categoryMembers es un array de objetos literales, dentro de ellos hay una key title
+    // que contiene el nombre de cada informática
+
+    if(Array.isArray(categoryMembers)){
+      return categoryMembers.map(member => member.title);
+    }else{
+      return [];
+    }
+
+    }),
+    catchError(err => {
+      console.error('Error al obtener los nombres de las informáticas:', err);
+      return of([]);
+    })
+    );
+  }
+
+
   getImageAndData(name: string) : Observable<{
       image : string | null,
       data : DatosGenio | null // DatosGenio es una interfaz que contiene todos los datos que se quieren del genio
@@ -88,33 +194,6 @@ export class ApiService {
     })
   );
 }
-
-  getAllGeniousByCategory(category : string) : Observable<string[]> {
-    // Se limpia el nombre de genios sustituyendo los espacios por _
-    const categoryClean = `Categoría:${encodeURIComponent(category)}`;
-
-    // Construcción de los parámetros con HttpParams
-    const params = new HttpParams()
-    .set('action', 'query')
-    .set('list', 'categorymembers')
-    .set('cmtitle', categoryClean)
-    .set('cmlimit', '50') // puedes ajustar el límite si quieres más resultados
-    .set('format', 'json')
-    .set('origin', '*');
-
-
-    // Petición HTTP
-    return this.http.get<any>(this.baseURL, { params }).pipe(
-      map(response => {
-        const members = response?.query?.categorymembers;
-        return members?.map((item: any) => item.title) || [];
-      }),
-      catchError(err => {
-        console.error('Error al obtener a los genios por su categoría:', err);
-        return of([]); // los array vacíos son más fácil de manejar con componentes
-      })
-    );
-  }
 
   getSummary(name :string) : Observable<string | null> {
     //Se limpia el nombre de genios sustituyendo los espacios por _

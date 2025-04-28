@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-gallery',
@@ -7,8 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GalleryComponent  implements OnInit {
 
-  constructor() { }
+  constructor(private apiService : ApiService) { }
 
   ngOnInit() {}
+
+  // Necesito optener las fotos de todos los genios y por cada 
+  // imagen generar su propio mini contenedor
 
 }
