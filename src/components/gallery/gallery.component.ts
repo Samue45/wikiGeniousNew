@@ -17,46 +17,40 @@ export class GalleryComponent  implements OnInit {
 
   ngOnInit() {}
 
-  // Necesito optener las fotos de todos los genios y por cada 
-  // imagen generar su propio mini contenedor
+  createGallery(){
+    // Obtenemos los nombres de las diferentes categorias y lo almacenamos en un array
+    const arrayNamesGenious: string[] = [];
+    this.getListNames(arrayNamesGenious)
 
-  // 1º Llamar a los métodos que me devuelven los nombres de los genios
-  // 2º Crear un array propio con todos los nombres (sin importar la categoría)
-  // 3º Recorrer el array y por cada nombre obtener la foto del genio y crear su contenedor personalizado
+    // Array para guardar todas las fotos
+    const arrayPhotosGenious: string[] = [];
 
-  createArrayOfNames(){
-    // Obtenemos los nombres de las diferentes categorias
-    const arrayNamesMath: string[] = [];
-    const arrayNamePhysic: string[] = [];
-    const arrayNameInformatic: string[] = [];
-
-    this.getListNames(arrayNamesMath,arrayNamePhysic,arrayNameInformatic)
-
-
-    //1º Obtener los nombres de todos los matemáticos
-    // Tengo que modificar los nombres obtenidos , ya que devuelve Categoría:Nombre del genio
-
+    // Recorremos el array,para obtener la foto y crear el contenedor especial por cada genio
+    
 
 
   }
 
-  getListNames(arrayNamesMath: string[], arrayNamePhysic: string[], arrayNameInformatic: string[]) {
+  getListNames(arrayNamesGenious: string[]) {
     forkJoin({
       math: this.apiService.getNamesMathGenious(),
       physic: this.apiService.getNamesPhysicGenious(),
       informatic: this.apiService.getNamesInformaticGenious()
     }).subscribe({
       next: ({ math, physic, informatic }) => {
-        // Modificar y agregar los nombres
-        arrayNamesMath.push(...math.map(name => name.replace("Categoría:", "").trim()));
-        arrayNamePhysic.push(...physic.map(name => name.replace("Categoría:", "").trim()));
-        arrayNameInformatic.push(...informatic.map(name => name.replace("Categoría:", "").trim()));
-        console.log(arrayNamesMath, arrayNamePhysic, arrayNameInformatic);
+        // Tengo que modificar los nombres obtenidos , ya que devuelve Categoría:Nombre del genio
+        arrayNamesGenious.push(...math.map(name => name.replace("Categoría:", "").trim()));
+        arrayNamesGenious.push(...physic.map(name => name.replace("Categoría:", "").trim()));
+        arrayNamesGenious.push(...informatic);
       },
       error: (err) => {
         console.error('Error al obtener los nombres:', err);
       }
     });
+  }
+
+  getPhotos(arrayNamesGenious: string[], arrayPhotosGenious: string[]){
+    // Aquí hacemos la petición de las fotos de cada genio y las almacenamos en un array
   }
 
 }
