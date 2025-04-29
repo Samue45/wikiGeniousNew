@@ -1,5 +1,5 @@
 <ion-card>
-  <img [src]="photoUrl" alt="Foto de {{ name }}" />
+  <img [src]="photoUrl || 'assets/no-image.png'" alt="{{ name }}" />
   <ion-card-header>
     <ion-card-title>{{ name }}</ion-card-title>
   </ion-card-header>

@@ -11,6 +11,7 @@ import { DatosGenio } from '../models/datos-genio';
 
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +33,8 @@ export class ApiService {
     .set('list', 'categorymembers')
     .set('cmtitle', 'Category:Categorías_de_matemáticos')
     .set('format', 'json')
-    .set('cmtype', 'subcat');
+    .set('cmtype', 'subcat')
+    .set('origin', '*');;
 
     return this.http.get<any>(this.baseURL, { params }).pipe(
       map(response => {
@@ -68,7 +70,8 @@ export class ApiService {
     .set('list', 'categorymembers')
     .set('cmtitle', 'Category:Categor%C3%ADas_de_f%C3%ADsicos')
     .set('format', 'json')
-    .set('cmtype', 'subcat');
+    .set('cmtype', 'subcat')
+    .set('origin', '*');
 
     return this.http.get<any>(this.baseURL, { params }).pipe(
     map(response => {
@@ -103,7 +106,8 @@ export class ApiService {
     .set('action', 'query')
     .set('list', 'categorymembers')
     .set('cmtitle', 'Category:Pioneras_de_la_inform%C3%A1tica')
-    .set('format', 'json');
+    .set('format', 'json')
+    .set('origin', '*');
 
     return this.http.get<any>(this.baseURL, { params }).pipe(
     map(response => {
@@ -142,7 +146,8 @@ export class ApiService {
     .set('origin', '*')
     .set('titles', title)
     .set('prop', 'pageimages|pageprops')
-    .set('pithumbsize', '400'); // tamaño de la imagen en px
+    .set('pithumbsize', '400') // tamaño de la imagen en px
+    .set('origin', '*');
 
     //Tratamos el Observable
     return this.http.get<any>(this.baseURL,{ params }).pipe(
@@ -178,13 +183,15 @@ export class ApiService {
   .set('origin', '*')
   .set('titles', title)
   .set('prop', 'pageimages')
-  .set('pithumbsize', '400'); // tamaño de la imagen en px
+  .set('pithumbsize', '400') // tamaño de la imagen en px
+  .set('origin', '*');
 
   //Tratamos el Observable
   return this.http.get<any>(this.baseURL,{ params }).pipe(
     map(response => {
       const pages = response?.query?.pages;
       const page = pages[Object.keys(pages)[0]];
+      console.log('Página encontrada:', page); // 👈 Agregar un log
       return page?.thumbnail?.source || null;
 
     }),
@@ -207,7 +214,8 @@ export class ApiService {
     .set('prop', 'extracts')
     .set('exintro', 'true')       // solo el primer párrafo
     .set('explaintext', 'true')   // sin HTML
-    .set('titles', title);
+    .set('titles', title)
+    .set('origin', '*');
 
    // Petición HTTP
    return this.http.get<any>(this.baseURL, { params }).pipe(
