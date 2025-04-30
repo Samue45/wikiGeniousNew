@@ -4,8 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-grid>
+<ion-grid>
     <ion-row>
       <!-- Usamos *ngFor para recorrer el array de geniousData -->
       <ion-col size="6" size-md="4" *ngFor="let genious of getGeniousData(); let i = index">
@@ -13,5 +12,4 @@
         <app-mini-card-genious [photoUrl]="genious.photoUrl" [name]="genious.name"></app-mini-card-genious>
       </ion-col>
     </ion-row>
-  </ion-grid>
-</ion-content>
+</ion-grid>

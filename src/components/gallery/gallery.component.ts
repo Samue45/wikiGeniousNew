@@ -19,7 +19,6 @@ export class GalleryComponent  implements OnInit {
   // Usamos un solo array de objetos para contener tanto el nombre como la foto
   private geniousData: { name: string, photoUrl: string | null }[] = [];
 
-  public urlImagesBase: string = "https://www.zizurmayor.es/wp-content/uploads/2022/11/sin-perfil.jpg";
   constructor(private apiService : ApiService) {}
 
   ngOnInit() {
@@ -91,7 +90,7 @@ export class GalleryComponent  implements OnInit {
         // Combinamos los nombres con las fotos
         this.geniousData = allNames.map((name, index) => ({
           name,
-          photoUrl: photos[index] || this.urlImagesBase //null // Si no hay foto, asignamos null
+          photoUrl: photos[index] || null //null // Si no hay foto, asignamos null
         }));
         console.log('Genios con fotos:', this.geniousData); // 👈 Agrega esto
       },

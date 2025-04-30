@@ -1,7 +1,11 @@
 <ion-card>
-  <img [src]="photoUrl || 'assets/no-image.png'" alt="{{ name }}" />
+  <div class="photo-wrapper">
+    <img 
+      [src]="photoUrl || 'assets/sin-foto.jpg'" 
+      alt="{{ name }}" 
+    />
+  </div>
   <ion-card-header>
     <ion-card-title>{{ name }}</ion-card-title>
   </ion-card-header>
 </ion-card>
-
