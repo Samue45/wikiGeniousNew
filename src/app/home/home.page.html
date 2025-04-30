@@ -12,7 +12,11 @@
 
 <ion-content [fullscreen]="true">
   <ion-content>
-    <!-- Usamos el selector de GalleryPage aquí -->
-    <app-gallery></app-gallery>  <!-- Esto va dentro del contenido de la vista Home -->
+    <div class="navigation-container">
+      <app-nav></app-nav> 
+      <app-button-filter></app-button-filter> 
+    </div>
+
+    <app-gallery></app-gallery>  
   </ion-content>
 </ion-content>

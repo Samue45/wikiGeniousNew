@@ -1,0 +1,30 @@
+/* Eliminar el color predeterminado azul de los botones */
+ion-button {
+    --color: white; /* Color del texto e icono */
+    --background: #2e8b57; /* Verde oscuro para el fondo */
+    --border-radius: 8px; /* Bordes redondeados */
+    --box-shadow: none; /* Eliminar sombra predeterminada */
+    --padding-start: 10px; /* Ajuste del padding */
+    --padding-end: 10px;
+  
+    /* Asegurarse de que el icono también siga la misma coloración */
+    color: white; /* El color del icono se establece en blanco */
+  }
+  
+  /* Estilos al hacer hover sobre el botón */
+  ion-button:hover {
+    --background: #66cdaa; /* Verde claro al hacer hover */
+    --color: white; /* Asegurarse de que el icono se mantenga blanco */
+  }
+  
+  /* Estilos para los íconos dentro del botón */
+  ion-icon {
+    font-size: 24px; /* Tamaño del ícono */
+  }
+  
+  /* Eliminar el efecto de enfoque azul (el color predeterminado cuando el botón es presionado) */
+  ion-button:focus {
+    --box-shadow: none;
+    outline: none;
+  }
+  

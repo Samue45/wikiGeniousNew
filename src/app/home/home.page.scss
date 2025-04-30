@@ -50,3 +50,11 @@ ion-title {
 #container a {
   text-decoration: none;
 }
+
+/* Contenedor principal para la navegación y el filtro */
+.navigation-container {
+  display:flex;
+  flex-direction:row;
+  align-items: center;
+  padding: 16px;
+}
