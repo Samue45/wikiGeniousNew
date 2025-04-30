@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
-import { catchError, forkJoin } from 'rxjs';
+import { catchError, forkJoin, map } from 'rxjs';
 import { of } from 'rxjs';
 import { NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
@@ -19,8 +19,7 @@ export class GalleryComponent  implements OnInit {
   // Usamos un solo array de objetos para contener tanto el nombre como la foto
   private geniousData: { name: string, photoUrl: string | null }[] = [];
 
-  public url : string = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Retrato_de_un_erudito_%28%C2%BFArqu%C3%ADmedes%3F%29%2C_por_Domenico_Fetti.jpg/500px-Retrato_de_un_erudito_%28%C2%BFArqu%C3%ADmedes%3F%29%2C_por_Domenico_Fetti.jpg";
-
+  public urlImagesBase: string = "https://www.zizurmayor.es/wp-content/uploads/2022/11/sin-perfil.jpg";
   constructor(private apiService : ApiService) {}
 
   ngOnInit() {
@@ -33,8 +32,8 @@ export class GalleryComponent  implements OnInit {
       next: ({ math, physic, informatic }) => {
         // Procesamos los nombres, y después obtenemos las fotos
         const allNames = [
-          ...math.map(name => name.replace("Categoría:", "").trim()),
-          ...physic.map(name => name.replace("Categoría:", "").trim()),
+          ...math.map(name => name.replace("Categoría:", "")),
+          ...physic.map(name => name.replace("Categoría:", "")),
           ...informatic
         ];
 
@@ -63,6 +62,8 @@ export class GalleryComponent  implements OnInit {
       })
     );
   }
+
+  
   
 
   getPhotos(allNames: string[]) {
@@ -90,7 +91,7 @@ export class GalleryComponent  implements OnInit {
         // Combinamos los nombres con las fotos
         this.geniousData = allNames.map((name, index) => ({
           name,
-          photoUrl: photos[index] || this.url //null // Si no hay foto, asignamos null
+          photoUrl: photos[index] || this.urlImagesBase //null // Si no hay foto, asignamos null
         }));
         console.log('Genios con fotos:', this.geniousData); // 👈 Agrega esto
       },

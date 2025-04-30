@@ -23,6 +23,15 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   // Endpoints del Servicio
+  normalizeName(name: string): string {
+    return name
+      .replace("Categoría:", "")     // Quita prefijos innecesarios
+      .replace(/\(científica\)\s*/i, "")  // Quita "(científica)" y los posibles espacios al final
+      .trim()                        // Quita espacios al inicio y final
+      .normalize("NFD")              // Descompone letras acentuadas (é → e +  ́)
+      .replace(/\s+/g, "_");         // Reemplaza todos los espacios por _
+  }
+
   getNamesMathGenious() : Observable< string[]>{
     // URL completa
     //https://es.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Categorías_de_matemáticos&format=json&cmtype=subcat
@@ -34,7 +43,7 @@ export class ApiService {
     .set('cmtitle', 'Category:Categorías_de_matemáticos')
     .set('format', 'json')
     .set('cmtype', 'subcat')
-    .set('origin', '*');;
+    .set('origin', '*');
 
     return this.http.get<any>(this.baseURL, { params }).pipe(
       map(response => {
@@ -68,7 +77,7 @@ export class ApiService {
     const params = new HttpParams()
     .set('action', 'query')
     .set('list', 'categorymembers')
-    .set('cmtitle', 'Category:Categor%C3%ADas_de_f%C3%ADsicos')
+    .set('cmtitle', 'Category:Categorías_de_físicos')
     .set('format', 'json')
     .set('cmtype', 'subcat')
     .set('origin', '*');
@@ -105,7 +114,7 @@ export class ApiService {
     const params = new HttpParams()
     .set('action', 'query')
     .set('list', 'categorymembers')
-    .set('cmtitle', 'Category:Pioneras_de_la_inform%C3%A1tica')
+    .set('cmtitle', 'Category:Pioneras_de_la_informática')
     .set('format', 'json')
     .set('origin', '*');
 
@@ -174,7 +183,7 @@ export class ApiService {
 
   getImage(name: string) : Observable<string | null> {
   //Se limpia el nombre de genios sustituyendo los espacios por _
-  const title = encodeURIComponent(name);
+  const title = this.normalizeName(name);
 
   // Parámetros esenciales de la URL
   const params = new HttpParams()
@@ -183,8 +192,7 @@ export class ApiService {
   .set('origin', '*')
   .set('titles', title)
   .set('prop', 'pageimages')
-  .set('pithumbsize', '400') // tamaño de la imagen en px
-  .set('origin', '*');
+  .set('pithumbsize', '400'); // tamaño de la imagen en px
 
   //Tratamos el Observable
   return this.http.get<any>(this.baseURL,{ params }).pipe(
