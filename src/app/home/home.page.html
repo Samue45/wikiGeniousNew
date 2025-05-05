@@ -13,10 +13,10 @@
 <ion-content [fullscreen]="true">
   <ion-content>
     <div class="navigation-container">
-      <app-nav></app-nav> 
+      <app-nav (textoBuscado)="gallery.searchGeniousByName($event)"></app-nav> 
       <app-button-filter></app-button-filter> 
     </div>
 
-    <app-gallery></app-gallery>  
+    <app-gallery #gallery></app-gallery>  
   </ion-content>
 </ion-content>

@@ -1,1 +1,2 @@
-<ion-searchbar animated="true" placeholder="Búsca al genio aquí"></ion-searchbar>
+<ion-searchbar animated="true" placeholder="Búsca al genio aquí" 
+[(ngModel)]="textoBusqueda" (ionInput)="onSearchChange($event)"></ion-searchbar>

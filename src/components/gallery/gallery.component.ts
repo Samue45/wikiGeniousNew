@@ -4,7 +4,7 @@ import { catchError, forkJoin, map } from 'rxjs';
 import { of } from 'rxjs';
 import { NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
 import { MiniCardGeniousComponent } from '../mini-card-genious/mini-card-genious.component';
 
 
@@ -12,12 +12,13 @@ import { MiniCardGeniousComponent } from '../mini-card-genious/mini-card-genious
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
-  imports : [NgFor, CommonModule , IonHeader, IonToolbar, IonTitle, IonContent,  IonGrid, IonRow, IonCol , MiniCardGeniousComponent]
+  imports : [NgFor, CommonModule , IonHeader, IonToolbar, IonTitle,  IonGrid, IonRow, IonCol , MiniCardGeniousComponent]
 })
 export class GalleryComponent  implements OnInit {
 
   // Usamos un solo array de objetos para contener tanto el nombre como la foto
   private geniousData: { name: string, photoUrl: string | null }[] = [];
+  private filteredGeniousData: { name: string, photoUrl: string | null }[] = [];
 
   constructor(private apiService : ApiService) {}
 
@@ -62,9 +63,6 @@ export class GalleryComponent  implements OnInit {
     );
   }
 
-  
-  
-
   getPhotos(allNames: string[]) {
     // Si no hay nombres, salimos de la función
     if (allNames.length === 0) {
@@ -90,9 +88,11 @@ export class GalleryComponent  implements OnInit {
         // Combinamos los nombres con las fotos
         this.geniousData = allNames.map((name, index) => ({
           name,
-          photoUrl: photos[index] || null //null // Si no hay foto, asignamos null
+          photoUrl: photos[index] || null // Si no hay foto, asignamos null
         }));
         console.log('Genios con fotos:', this.geniousData); // 👈 Agrega esto
+
+        this.filteredGeniousData = [...this.geniousData]; // Inicializamos el array para filtrar los genios
       },
       error: (err) => {
         console.log('Hubo un error al obtener las fotos:', err);
@@ -100,8 +100,31 @@ export class GalleryComponent  implements OnInit {
     });
   }
 
+  searchGeniousByName(nameSearch : string) {
+
+    // Volvemos a pasar el nombre a minúscula, por si es llamado desde otro componente
+    const lowerSearch = nameSearch.toLowerCase();
+  
+    if (!lowerSearch) {
+      // Si no hay texto, mostramos todos los genios
+      this.filteredGeniousData = [...this.geniousData];
+    } else {
+      this.filteredGeniousData = this.geniousData.filter(genio =>
+        genio.name.toLowerCase().startsWith(lowerSearch)
+      );
+    }
+      
+  } 
+
   // Métodos para acceder a los datos
   getGeniousData() {
     return this.geniousData;
   }
+
+  getGeniousDataByName(){
+    return this.filteredGeniousData;
+  }
+
+
+  
 }

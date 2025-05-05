@@ -7,7 +7,7 @@
 <ion-grid>
     <ion-row>
       <!-- Usamos *ngFor para recorrer el array de geniousData -->
-      <ion-col size="6" size-md="4" *ngFor="let genious of getGeniousData(); let i = index">
+      <ion-col size="6" size-md="4" *ngFor="let genious of getGeniousDataByName(); let i = index">
         <!-- Aquí agregamos el componente 'mini-card-genious' para cada genio -->
         <app-mini-card-genious [photoUrl]="genious.photoUrl" [name]="genious.name"></app-mini-card-genious>
       </ion-col>
