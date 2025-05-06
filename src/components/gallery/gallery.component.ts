@@ -6,7 +6,7 @@ import { NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
 import { MiniCardGeniousComponent } from '../mini-card-genious/mini-card-genious.component';
-
+import { GeniousCategory } from 'src/app/models/GeniousCategory ';
 
 @Component({
   selector: 'app-gallery',
@@ -117,6 +117,33 @@ export class GalleryComponent  implements OnInit {
     }
       
   } 
+
+  searchGeniousByCategory(category :string) {
+    // 1º Recibimos el texto del segmento selecionado
+    // 2º Hacemos uso de un enum para identificar el valor númerico de la categoría
+    // 3º Filtramos el array con todos lo genios en base a la categoría
+    let categoryEnum : number ;
+
+    if(category === "MATEMATICOS"){
+      categoryEnum = GeniousCategory.Math; 
+    }else if (category === "FISICOS"){
+      categoryEnum = GeniousCategory.Physic; 
+    }else if (category === "INFORMATICAS"){
+      categoryEnum = GeniousCategory.Informatic; 
+    }else{
+      categoryEnum = GeniousCategory.Todos;
+    }
+
+    if (categoryEnum === GeniousCategory.Todos) {
+      // Si no hay texto, mostramos todos los genios
+      this.filteredGeniousData = [...this.geniousData];
+    } else {
+      this.filteredGeniousData = this.geniousData.filter(genio =>
+        genio.category === categoryEnum
+      );
+    }
+
+  }
 
   // Métodos para acceder a los datos
   getGeniousData() {

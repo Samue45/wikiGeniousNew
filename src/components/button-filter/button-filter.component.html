@@ -1,14 +1,14 @@
-<ion-segment value="buttons">
-  <ion-segment-button value="default">
+<ion-segment value="default" [(ngModel)]="textoCategory" (ionChange)="onSearchChange($event)">
+  <ion-segment-button value="TODOS">
     <ion-label>Todos</ion-label>
   </ion-segment-button>
-  <ion-segment-button value="segment1">
+  <ion-segment-button value="MATEMATICOS">
     <ion-label>Matemáticos</ion-label>
   </ion-segment-button>
-  <ion-segment-button value="segment2">
+  <ion-segment-button value="FISICOS">
     <ion-label>Físicos</ion-label>
   </ion-segment-button>
-  <ion-segment-button value="segment3">
+  <ion-segment-button value="INFORMATICAS">
     <ion-label>Informáticas</ion-label>
   </ion-segment-button>
 </ion-segment>

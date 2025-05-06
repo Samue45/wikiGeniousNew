@@ -14,7 +14,7 @@
   <ion-content>
     <div class="navigation-container">
       <app-nav (textoBuscado)="gallery.searchGeniousByName($event)"></app-nav> 
-      <app-button-filter></app-button-filter> 
+      <app-button-filter (categorySelected)="gallery.searchGeniousByCategory($event)"></app-button-filter> 
     </div>
 
     <app-gallery #gallery></app-gallery>  
