@@ -32,7 +32,7 @@ export class ApiService {
       .replace(/\s+/g, "_");         // Reemplaza todos los espacios por _
   }
 
-  getNamesMathGenious() : Observable< string[]>{
+  getNamesMathGenious() : Observable<{ name: string; category: number }[]>{
     // URL completa
     //https://es.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Categorías_de_matemáticos&format=json&cmtype=subcat
 
@@ -54,7 +54,10 @@ export class ApiService {
       // que contiene el nombre de cada matemático
 
       if(Array.isArray(categoryMembers)){
-        return categoryMembers.map(member => member.title);
+        return categoryMembers.map(member => ({
+          name : member.title,
+          category : 0
+        }));
       }else{
         return [];
       }
@@ -68,7 +71,7 @@ export class ApiService {
 
   }
 
-  getNamesPhysicGenious() : Observable<string []>{
+  getNamesPhysicGenious() : Observable<{ name: string; category: number }[]>{
 
     // URL completa
     //https://es.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Categor%C3%ADas_de_f%C3%ADsicos&format=json&cmtype=subcat
@@ -91,7 +94,10 @@ export class ApiService {
     // que contiene el nombre de cada físico
 
     if(Array.isArray(categoryMembers)){
-      return categoryMembers.map(member => member.title);
+      return categoryMembers.map(member => ({
+        name : member.title,
+        category : 1
+      }));
     }else{
       return [];
     }
@@ -104,7 +110,7 @@ export class ApiService {
     );
   }
 
-  getNamesInformaticGenious() : Observable<string []>{
+  getNamesInformaticGenious() : Observable<{ name: string; category: number }[]>{
 
     // URL completa
     //https://es.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Pioneras_de_la_inform%C3%A1tica&format=json
@@ -127,7 +133,10 @@ export class ApiService {
     // que contiene el nombre de cada informática
 
     if(Array.isArray(categoryMembers)){
-      return categoryMembers.map(member => member.title);
+      return categoryMembers.map(member => ({
+        name : member.title,
+        category : 2
+      }));
     }else{
       return [];
     }

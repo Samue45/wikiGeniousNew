@@ -1,6 +1,14 @@
-<ion-button size="large">
-  <!-- Ícono de ojo cerrado por defecto -->
-  <ion-icon slot="icon-only" name="eye"></ion-icon>
-  <!-- Ícono de ojo abierto al hacer hover -->
-  <ion-icon slot="icon-only" name="eye-open"  color="success"></ion-icon>
-</ion-button>
+<ion-segment value="buttons">
+  <ion-segment-button value="default">
+    <ion-label>Todos</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="segment1">
+    <ion-label>Matemáticos</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="segment2">
+    <ion-label>Físicos</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="segment3">
+    <ion-label>Informáticas</ion-label>
+  </ion-segment-button>
+</ion-segment>

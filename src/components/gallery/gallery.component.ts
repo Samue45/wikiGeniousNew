@@ -17,9 +17,9 @@ import { MiniCardGeniousComponent } from '../mini-card-genious/mini-card-genious
 export class GalleryComponent  implements OnInit {
 
   // Usamos un solo array de objetos para contener tanto el nombre como la foto
-  private geniousData: { name: string, photoUrl: string | null }[] = [];
-  private filteredGeniousData: { name: string, photoUrl: string | null }[] = [];
-
+  private geniousData: { name: string, category: number, photoUrl: string | null }[] = [];
+  private filteredGeniousData: { name: string, category: number, photoUrl: string | null }[] = [];
+  
   constructor(private apiService : ApiService) {}
 
   ngOnInit() {
@@ -32,13 +32,16 @@ export class GalleryComponent  implements OnInit {
       next: ({ math, physic, informatic }) => {
         // Procesamos los nombres, y después obtenemos las fotos
         const allNames = [
-          ...math.map(name => name.replace("Categoría:", "")),
-          ...physic.map(name => name.replace("Categoría:", "")),
+          ...math.map(genious => ({
+            ...genious,
+            name: genious.name.replace("Categoría:", "").trim()
+          })),
+          ...physic.map(genious => ({
+            ...genious,
+            name: genious.name.replace("Categoría:", "").trim()
+          })),
           ...informatic
         ];
-
-        console.log('Todos los nombres:', allNames); // 👈 Verificar los nombres
-
 
         // Ahora obtenemos las fotos
         this.getPhotos(allNames);
@@ -63,7 +66,7 @@ export class GalleryComponent  implements OnInit {
     );
   }
 
-  getPhotos(allNames: string[]) {
+  getPhotos(allNames: { name: string; category: number }[]) {
     // Si no hay nombres, salimos de la función
     if (allNames.length === 0) {
       console.log('No hay nombres para cargar fotos');
@@ -71,10 +74,10 @@ export class GalleryComponent  implements OnInit {
     }
 
     // Creamos los observables para obtener las fotos de los genios
-    const arrayObservable = allNames.map((name) =>
-      this.apiService.getImage(name).pipe(
+    const arrayObservable = allNames.map((genio) =>
+      this.apiService.getImage(genio.name).pipe(
         catchError((err) => {
-          console.log('Error al obtener la foto del genio:', name, err);
+          console.log('Error al obtener la foto del genio:', genio.name, err);
           return of(null); // Si hay error, devolvemos null
         })
       )
@@ -83,14 +86,13 @@ export class GalleryComponent  implements OnInit {
     // Esperamos que todas las solicitudes se resuelvan usando forkJoin
     forkJoin(arrayObservable).subscribe({
       next: (photos) => {
-        console.log('Fotos obtenidas:', photos); // 👈 Verificar las fotos obtenidas
 
         // Combinamos los nombres con las fotos
-        this.geniousData = allNames.map((name, index) => ({
-          name,
-          photoUrl: photos[index] || null // Si no hay foto, asignamos null
+        this.geniousData = allNames.map((genio, index) => ({
+          name: genio.name,
+          category: genio.category,
+          photoUrl: photos[index] || null
         }));
-        console.log('Genios con fotos:', this.geniousData); // 👈 Agrega esto
 
         this.filteredGeniousData = [...this.geniousData]; // Inicializamos el array para filtrar los genios
       },

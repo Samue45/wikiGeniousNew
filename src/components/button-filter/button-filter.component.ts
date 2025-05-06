@@ -1,26 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { IonButton, IonIcon } from '@ionic/angular/standalone';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
+import { FormsModule } from '@angular/forms';
 
-import { addIcons } from 'ionicons';
-import { eye, eyeOff  } from 'ionicons/icons';
+
 
 @Component({
   selector: 'app-button-filter',
   templateUrl: './button-filter.component.html',
   styleUrls: ['./button-filter.component.scss'],
-  imports: [IonButton, IonIcon],
+  imports: [IonLabel, IonSegment, IonSegmentButton, FormsModule ],
 })
-export class ButtonFilterComponent  implements OnInit {
-  icon = eye; // Por defecto, el ícono es el ojo cerrado.
+export class ButtonFilterComponent   {
+
+  constructor() {}
+
+  // Desde aquí solo pasamos el texto de la categoría selecionada
+  // Luego en el componente gallery hacemos el filtrado por la categoría selecionada
+
+  textoCategory: string = '';
+
+  @Output() textoBuscado = new EventEmitter<string>();
+
+  onSearchChange(event: any) {
+    // 1º Obtenemos el texto introducido en la barra de búsqueda de manera reactiva
+    // 2º Pasamos dicho texto a minúscula
+    // 3º Se lo pasamos al componente home 
+    const valor = event.target.value.toLowerCase();
+    this.textoBuscado.emit(valor); // Emitimos el texto al padre
 
 
-  constructor() {
-    addIcons({ eye, eyeOff }); // Registramos ambos íconos
-  }
-
-  ngOnInit() {}
-
-  toggleEye(){
-    this.icon = this.icon === eye ? eyeOff : eye;
   }
 }

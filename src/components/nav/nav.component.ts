@@ -16,7 +16,7 @@ export class NavComponent {
   @Output() textoBuscado = new EventEmitter<string>();
 
   onSearchChange(event: any) {
-    // 1º Obtenemos el texto introducido en la barra de búsqueda de manera responsive
+    // 1º Obtenemos el texto introducido en la barra de búsqueda de manera reactiva
     // 2º Pasamos dicho texto a minúscula
     // 3º Se lo pasamos al componente home 
     const valor = event.target.value.toLowerCase();
