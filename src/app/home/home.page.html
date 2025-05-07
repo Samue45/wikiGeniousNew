@@ -11,12 +11,23 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-content>
-    <div class="navigation-container">
-      <app-nav (textoBuscado)="onTextSearch($event)"></app-nav> 
-      <app-button-filter (categorySelected)="onCategorySearch($event)"></app-button-filter> 
-    </div>
+  <div class="navigation-container">
+    <app-nav (textoBuscado)="onTextSearch($event)"></app-nav> 
+    <app-button-filter (categorySelected)="onCategorySearch($event)"></app-button-filter> 
+  </div>
 
-    <app-gallery #gallery></app-gallery>  
-  </ion-content>
+  <!-- Galería -->
+  <app-gallery #gallery (geniusSelected)="onGeniusSelected($event)"></app-gallery>  
+
+  <!-- Carta detallada (solo si hay un genio seleccionado) -->
+  <app-genius-card 
+  *ngIf="selectedGenius" 
+  [name]="selectedGenius.name"
+  [photoUrl]="selectedGenius.photoUrl"
+  [category]="selectedGenius.category"
+  [achievements]="selectedGenius.achievements"
+  [studies]="selectedGenius.studies"
+  (close)="selectedGenius = null">
+  </app-genius-card>
 </ion-content>
+

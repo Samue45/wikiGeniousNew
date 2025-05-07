@@ -1,3 +1,18 @@
-<p>
-  presentation-card works!
-</p>
+<ion-card>
+  <ion-img [src]="photoUrl || 'assets/sin-foto.jpg'" alt="{{ name }}" class="genius-image"></ion-img>
+
+  <ion-card-header>
+    <ion-card-title>{{ name }}</ion-card-title>
+    <ion-card-subtitle>{{ category }}</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <p><strong>Logros:</strong> {{ achievements }}</p>
+    <p><strong>Estudios:</strong> {{ studies }}</p>
+  </ion-card-content>
+
+  <ion-button expand="full" color="danger" (click)="closeCard()">
+    Cerrar
+  </ion-button>
+</ion-card>
+

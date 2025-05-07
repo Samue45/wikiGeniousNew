@@ -4,7 +4,7 @@ import { AfterViewInit } from '@angular/core';
 import { GalleryComponent } from 'src/components/gallery/gallery.component';
 import { NavComponent } from 'src/components/nav/nav.component';
 import { ButtonFilterComponent } from 'src/components/button-filter/button-filter.component';
-
+import { DatosGenio } from '../models/datos-genio';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +16,7 @@ import { ButtonFilterComponent } from 'src/components/button-filter/button-filte
 export class HomePage implements AfterViewInit {
 
   @ViewChild('gallery') gallery!: GalleryComponent;
+  selectedGenius: DatosGenio | null = null;
   
   searchText: string = '';
   categoryText: string = '';
@@ -45,4 +46,11 @@ export class HomePage implements AfterViewInit {
       this.gallery.searchGeniousByNameAndCategory(this.searchText, this.categoryText);
     }
   }
+
+  
+  // Método que se ejecuta cuando seleccionas un genio en la galería
+  onGeniusSelected(genius: DatosGenio) {
+    this.selectedGenius = genius;
+  }
+
 }
