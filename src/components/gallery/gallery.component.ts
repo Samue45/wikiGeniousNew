@@ -102,49 +102,28 @@ export class GalleryComponent  implements OnInit {
     });
   }
 
-  searchGeniousByName(nameSearch : string) {
-
-    // Volvemos a pasar el nombre a minúscula, por si es llamado desde otro componente
+  searchGeniousByNameAndCategory(nameSearch: string = '', category: string = 'TODOS'){
     const lowerSearch = nameSearch.toLowerCase();
+
+    // Mapeo de las categorías
+    const categoryEnumMap: Record<string, GeniousCategory>  = {
+      "MATEMATICOS": GeniousCategory.Math,
+      "FISICOS": GeniousCategory.Physic,
+      "INFORMATICAS": GeniousCategory.Informatic
+    };
   
-    if (!lowerSearch) {
-      // Si no hay texto, mostramos todos los genios
-      this.filteredGeniousData = [...this.geniousData];
-    } else {
-      this.filteredGeniousData = this.geniousData.filter(genio =>
-        genio.name.toLowerCase().startsWith(lowerSearch)
-      );
-    }
-      
-  } 
-
-  searchGeniousByCategory(category :string) {
-    // 1º Recibimos el texto del segmento selecionado
-    // 2º Hacemos uso de un enum para identificar el valor númerico de la categoría
-    // 3º Filtramos el array con todos lo genios en base a la categoría
-    let categoryEnum : number ;
-
-    if(category === "MATEMATICOS"){
-      categoryEnum = GeniousCategory.Math; 
-    }else if (category === "FISICOS"){
-      categoryEnum = GeniousCategory.Physic; 
-    }else if (category === "INFORMATICAS"){
-      categoryEnum = GeniousCategory.Informatic; 
-    }else{
-      categoryEnum = GeniousCategory.Todos;
-    }
-
-    if (categoryEnum === GeniousCategory.Todos) {
-      // Si no hay texto, mostramos todos los genios
-      this.filteredGeniousData = [...this.geniousData];
-    } else {
-      this.filteredGeniousData = this.geniousData.filter(genio =>
-        genio.category === categoryEnum
-      );
-    }
-
+    const categoryEnum = categoryEnumMap[category.toUpperCase()] ?? GeniousCategory.Todos;
+  
+    // Aplicar el filtro sobre los genios
+    this.filteredGeniousData = this.geniousData.filter(genio => {
+      const matchesCategory = categoryEnum === GeniousCategory.Todos || genio.category === categoryEnum;
+      const matchesName = !lowerSearch || genio.name.toLowerCase().startsWith(lowerSearch);
+  
+      return matchesCategory && matchesName;
+    });
+  
   }
-
+  
   // Métodos para acceder a los datos
   getGeniousData() {
     return this.geniousData;

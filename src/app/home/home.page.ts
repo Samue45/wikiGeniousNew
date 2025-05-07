@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component ,ViewChild } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
-import { ApiService } from '../services/api.service';
 import { AfterViewInit } from '@angular/core';
 import { GalleryComponent } from 'src/components/gallery/gallery.component';
 import { NavComponent } from 'src/components/nav/nav.component';
@@ -15,15 +14,35 @@ import { ButtonFilterComponent } from 'src/components/button-filter/button-filte
 
 })
 export class HomePage implements AfterViewInit {
+
+  @ViewChild('gallery') gallery!: GalleryComponent;
   
-  constructor(private apiService: ApiService) { } // Inyectamos el ApiService
+  searchText: string = '';
+  categoryText: string = '';
+
+  
+  constructor() { }
 
 
   ngAfterViewInit() {
     // Aquí puedes acceder al DOM después de que el componente se haya renderizado completamente.
-    const element = document.getElementById('container');
-    if (element) {
-      console.log('Element height:', element.offsetHeight);
+    this.updateFilter();
+  }
+
+  onTextSearch(text: string) {
+    this.searchText = text;
+    this.updateFilter();
+  }
+
+  onCategorySearch(category: string) {
+    this.categoryText = category;
+    this.updateFilter();
+  }
+
+  updateFilter() {
+    // Comprobación para evitar errores si aún no se ha inicializado
+    if (this.gallery) {
+      this.gallery.searchGeniousByNameAndCategory(this.searchText, this.categoryText);
     }
   }
 }

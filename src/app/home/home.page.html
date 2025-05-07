@@ -13,8 +13,8 @@
 <ion-content [fullscreen]="true">
   <ion-content>
     <div class="navigation-container">
-      <app-nav (textoBuscado)="gallery.searchGeniousByName($event)"></app-nav> 
-      <app-button-filter (categorySelected)="gallery.searchGeniousByCategory($event)"></app-button-filter> 
+      <app-nav (textoBuscado)="onTextSearch($event)"></app-nav> 
+      <app-button-filter (categorySelected)="onCategorySearch($event)"></app-button-filter> 
     </div>
 
     <app-gallery #gallery></app-gallery>  
