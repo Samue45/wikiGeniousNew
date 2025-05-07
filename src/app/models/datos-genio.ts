@@ -1,7 +1,7 @@
 export interface DatosGenio {
-    ocupacion: string[];
-    educacion: string[];
-    premios: string[];
-    nacimiento: string | null;
-    lugarNacimiento: string | null;    
+    category: string[];
+    studies: string[];
+    achievements: string[];
+    birthday: string | null;
+    country: string | null;    
 }

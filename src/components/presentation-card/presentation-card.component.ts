@@ -1,6 +1,7 @@
 import { Component, Input , Output, EventEmitter} from '@angular/core';
 import { IonButton, IonImg ,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/angular/standalone';
 import { IonicModule } from '@ionic/angular'; 
+import { DatosGenio } from 'src/app/models/datos-genio';
 
 @Component({
   selector: 'app-presentation-card',
@@ -10,13 +11,9 @@ import { IonicModule } from '@ionic/angular';
 })
 export class PresentationCardComponent {
 
-  constructor() { }
-
+  @Input() genius!: DatosGenio;
   @Input() name!: string;
   @Input() photoUrl!: string;
-  @Input() category!: string;
-  @Input() achievements!: string;
-  @Input() studies!: string;
 
   @Output() close = new EventEmitter<void>();
 

@@ -1,12 +1,39 @@
-ion-img.genius-image {
+ion-card {
+  display: flex;
+  flex-direction: row;
+  margin: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.genius-image {
+  width: 200px;
+  height: auto;
+  object-fit: cover;
+  border-right: 1px solid #ccc;
+
+  @media (max-width: 768px) {
     width: 100%;
-    height: auto;
-    border-radius: 10px;
+    border-right: none;
+    border-bottom: 1px solid #ccc;
   }
-  ion-card {
-    margin-bottom: 10px;
+}
+
+ion-card-header {
+  background-color: #f8f8f8;
+  padding: 15px;
+}
+
+ion-card-content {
+  padding: 15px;
+
+  ul {
+    margin-top: 5px;
+    padding-left: 20px;
   }
-  ion-item {
-    --inner-padding-start: 0;
-  }
-  
+}

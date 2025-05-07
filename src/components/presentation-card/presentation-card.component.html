@@ -3,16 +3,28 @@
 
   <ion-card-header>
     <ion-card-title>{{ name }}</ion-card-title>
-    <ion-card-subtitle>{{ category }}</ion-card-subtitle>
+    <ion-card-subtitle>
+      <!-- Mostramos las categorías separadas por comas -->
+      <span *ngIf="genius.category.length > 0">{{ genius.category.join(', ') }}</span>
+    </ion-card-subtitle>
   </ion-card-header>
 
   <ion-card-content>
-    <p><strong>Logros:</strong> {{ achievements }}</p>
-    <p><strong>Estudios:</strong> {{ studies }}</p>
+    <p><strong>Fecha de nacimiento:</strong> {{ genius.birthday || 'Desconocida' }}</p>
+    <p><strong>País:</strong> {{ genius.country || 'Desconocido' }}</p>
+
+    <p><strong>Logros:</strong></p>
+    <ul>
+      <li *ngFor="let achievement of genius.achievements">{{ achievement }}</li>
+    </ul>
+
+    <p><strong>Estudios:</strong></p>
+    <ul>
+      <li *ngFor="let study of genius.studies">{{ study }}</li>
+    </ul>
   </ion-card-content>
 
   <ion-button expand="full" color="danger" (click)="closeCard()">
     Cerrar
   </ion-button>
 </ion-card>
-
