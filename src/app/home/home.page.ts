@@ -5,7 +5,7 @@ import { GalleryComponent } from 'src/components/gallery/gallery.component';
 import { NavComponent } from 'src/components/nav/nav.component';
 import { SegmentButtonComponent } from 'src/components/segment-button/segment-button.component';
 import { PresentationCardComponent } from 'src/components/presentation-card/presentation-card.component';
-import { DatosGenio } from '../models/datos-genio';
+import { Genius } from '../models/Genius';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +17,7 @@ import { DatosGenio } from '../models/datos-genio';
 export class HomePage implements AfterViewInit {
 
   @ViewChild('gallery') gallery!: GalleryComponent;
-  selectedGenius: DatosGenio | null = null;
+  selectedGenius: Genius | null = null;
   
   searchText: string = '';
   categoryText: string = '';
@@ -50,7 +50,7 @@ export class HomePage implements AfterViewInit {
 
   
   // Método que se ejecuta cuando seleccionas un genio en la galería
-  onGeniusSelected(genius: DatosGenio) {
+  onGeniusSelected(genius: Genius) {
     this.selectedGenius = genius;
   }
 

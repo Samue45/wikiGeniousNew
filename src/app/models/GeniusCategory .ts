@@ -1,4 +1,4 @@
-export enum GeniousCategory {
+export enum GeniusCategory {
     Math = 0,
     Physic = 1,
     Informatic = 2,

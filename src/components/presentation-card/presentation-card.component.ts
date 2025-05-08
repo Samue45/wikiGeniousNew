@@ -1,7 +1,7 @@
 import { Component, Input , Output, EventEmitter} from '@angular/core';
 import { IonButton, IonImg ,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/angular/standalone';
 import { IonicModule } from '@ionic/angular'; 
-import { DatosGenio } from 'src/app/models/datos-genio';
+import { Genius } from 'src/app/models/Genius';
 import { GalleryComponent } from '../gallery/gallery.component';
 
 @Component({
@@ -14,7 +14,7 @@ export class PresentationCardComponent {
 
 
 
-  @Input() genius!: DatosGenio;
+  @Input() genius!: Genius;
   @Input() name!: string;
   @Input() photoUrl!: string;
 

@@ -6,7 +6,7 @@ import { NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
 import { MiniCardComponent } from '../mini-card/mini-card.component';
-import { GeniousCategory } from 'src/app/models/GeniousCategory ';
+import { GeniusCategory } from 'src/app/models/GeniusCategory ';
 
 @Component({
   selector: 'app-gallery',
@@ -39,7 +39,10 @@ export class GalleryComponent  implements OnInit {
             ...genious,
             name: genious.name.replace("Categoría:", "").trim()
           })),
-          ...informatic
+          ...informatic.map(genious => ({
+            ...genious,
+            name: genious.name.replace("Categoría:", "").trim()
+          }))
         ];
 
         // Ahora obtenemos las fotos
@@ -54,9 +57,9 @@ export class GalleryComponent  implements OnInit {
   getListNames() {
     // Hacemos solicitudes simultáneas para obtener los nombres de los genios
     return forkJoin({
-      math: this.apiService.getNamesMathGenious(),
-      physic: this.apiService.getNamesPhysicGenious(),
-      informatic: this.apiService.getNamesInformaticGenious()
+      math: this.apiService.getNamesMathGenius(),
+      physic: this.apiService.getNamesPhysicGenius(),
+      informatic: this.apiService.getNamesInformaticGenius()
     }).pipe(
       catchError((err) => {
         console.error('Error al obtener los nombres:', err);
@@ -105,17 +108,17 @@ export class GalleryComponent  implements OnInit {
     const lowerSearch = nameSearch.toLowerCase();
 
     // Mapeo de las categorías
-    const categoryEnumMap: Record<string, GeniousCategory>  = {
-      "MATEMATICOS": GeniousCategory.Math,
-      "FISICOS": GeniousCategory.Physic,
-      "INFORMATICAS": GeniousCategory.Informatic
+    const categoryEnumMap: Record<string, GeniusCategory>  = {
+      "MATEMATICOS": GeniusCategory.Math,
+      "FISICOS": GeniusCategory.Physic,
+      "INFORMATICAS": GeniusCategory.Informatic
     };
   
-    const categoryEnum = categoryEnumMap[category.toUpperCase()] ?? GeniousCategory.Todos;
+    const categoryEnum = categoryEnumMap[category.toUpperCase()] ?? GeniusCategory.Todos;
   
     // Aplicar el filtro sobre los genios
     this.filteredGeniusData = this.geniusData.filter(genio => {
-      const matchesCategory = categoryEnum === GeniousCategory.Todos || genio.category === categoryEnum;
+      const matchesCategory = categoryEnum === GeniusCategory.Todos || genio.category === categoryEnum;
       const matchesName = !lowerSearch || genio.name.toLowerCase().startsWith(lowerSearch);
   
       return matchesCategory && matchesName;
