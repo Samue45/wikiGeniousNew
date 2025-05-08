@@ -3,7 +3,7 @@ import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/stan
 import { AfterViewInit } from '@angular/core';
 import { GalleryComponent } from 'src/components/gallery/gallery.component';
 import { NavComponent } from 'src/components/nav/nav.component';
-import { ButtonFilterComponent } from 'src/components/button-filter/button-filter.component';
+import { SegmentButtonComponent } from 'src/components/segment-button/segment-button.component';
 import { PresentationCardComponent } from 'src/components/presentation-card/presentation-card.component';
 import { DatosGenio } from '../models/datos-genio';
 
@@ -11,7 +11,7 @@ import { DatosGenio } from '../models/datos-genio';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, GalleryComponent, NavComponent, ButtonFilterComponent, PresentationCardComponent],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, GalleryComponent, NavComponent, SegmentButtonComponent, PresentationCardComponent],
 
 })
 export class HomePage implements AfterViewInit {

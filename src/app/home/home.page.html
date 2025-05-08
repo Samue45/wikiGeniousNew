@@ -13,13 +13,13 @@
 <ion-content [fullscreen]="true">
   <div class="navigation-container">
     <app-nav (textoBuscado)="onTextSearch($event)"></app-nav> 
-    <app-button-filter (categorySelected)="onCategorySearch($event)"></app-button-filter> 
+    <app-segment-button (categorySelected)="onCategorySearch($event)"></app-segment-button> 
   </div>
 
-  <!-- Galería -->
-  <app-gallery #gallery (geniusSelected)="onGeniusSelected($event)"></app-gallery>  
-
-  <!-- Carta detallada (solo si hay un genio seleccionado) -->
+  
+  <app-gallery #gallery ></app-gallery>  
+<!-- Galería 
+  Carta detallada (solo si hay un genio seleccionado)
   <app-presentation-card
   *ngIf="selectedGenius" 
   [name]="selectedGenius.name"
@@ -28,6 +28,6 @@
   [achievements]="selectedGenius.achievements"
   [studies]="selectedGenius.studies"
   (close)="selectedGenius = null">
-  </app-presentation-card>
+  </app-presentation-card>-->
 </ion-content>
 

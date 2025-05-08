@@ -3,13 +3,14 @@ import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalon
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-button-filter',
-  templateUrl: './button-filter.component.html',
-  styleUrls: ['./button-filter.component.scss'],
+  selector: 'app-segment-button',
+  templateUrl: './segment-button.component.html',
+  styleUrls: ['./segment-button.component.scss'],
   standalone: true,
   imports: [IonLabel, IonSegment, IonSegmentButton, FormsModule],
 })
-export class ButtonFilterComponent {
+export class SegmentButtonComponent {
+
   textoCategory: string = '';
 
   @Output() categorySelected = new EventEmitter<string>();
@@ -18,4 +19,5 @@ export class ButtonFilterComponent {
     const valor = event.detail.value.normalize("NFD").toUpperCase(); // Normalizamos y pasamos a MAYÚSCULAS
     this.categorySelected.emit(valor);
   }
+
 }

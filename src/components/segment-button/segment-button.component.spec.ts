@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ButtonFilterComponent } from './button-filter.component';
+import { SegmentButtonComponent } from './segment-button.component';
 
-describe('ButtonFilterComponent', () => {
-  let component: ButtonFilterComponent;
-  let fixture: ComponentFixture<ButtonFilterComponent>;
+describe('SegmentButtonComponent', () => {
+  let component: SegmentButtonComponent;
+  let fixture: ComponentFixture<SegmentButtonComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ButtonFilterComponent ],
+      declarations: [ SegmentButtonComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ButtonFilterComponent);
+    fixture = TestBed.createComponent(SegmentButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
