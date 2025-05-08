@@ -19,18 +19,13 @@ export class ApiService {
 
   // Bases de las URL
   private baseURL ='https://es.wikipedia.org/w/api.php';
+  // Array con genios
+  private geniusData: { name: string, category: number, photoUrl: string | null }[] = [];
+
   
   constructor(private http: HttpClient) { }
 
   // Endpoints del Servicio
-  normalizeName(name: string): string {
-    return name
-      .replace("Categoría:", "")     // Quita prefijos innecesarios
-      .replace(/\(científica\)\s*/i, "")  // Quita "(científica)" y los posibles espacios al final
-      .trim()                        // Quita espacios al inicio y final
-      .normalize("NFD")              // Descompone letras acentuadas (é → e +  ́)
-      .replace(/\s+/g, "_");         // Reemplaza todos los espacios por _
-  }
 
   getNamesMathGenious() : Observable<{ name: string; category: number }[]>{
     // URL completa
@@ -248,7 +243,7 @@ export class ApiService {
    );
  }
 
- // Debería ser un método privado
+
  getIdGenious(wikidataId : string) : Observable<DatosGenio | null> {
 
   //Parámetros esenciales de la URL
@@ -264,11 +259,11 @@ export class ApiService {
   return this.http.get<any>(this.baseURL, { params }).pipe(
     map(data => {
       return {
-        ocupacion: this.obtenerValores(data, 'P106'),
-        educacion: this.obtenerValores(data, 'P69'),
-        premios: this.obtenerValores(data, 'P166'),
-        nacimiento: this.obtenerValor(data, 'P569'),
-        lugarNacimiento: this.obtenerValor(data, 'P19')
+        works: this.obtenerValores(data, 'P106'),
+        studies: this.obtenerValores(data, 'P69'),
+        achievements: this.obtenerValores(data, 'P166'),
+        birthday: this.obtenerValor(data, 'P569'),
+        country: this.obtenerValor(data, 'P19')
       };
     }),
     catchError(err => {
@@ -279,10 +274,8 @@ export class ApiService {
 
   }
 
- // Deberian ser métodos privados
-  // Métodos creados por ChatGPT
-  // Se encargan de obtener los valores asociado a cada key que hay dentro de un ID
-  // Ejemplo : ocupation,education,premios,nacimiento, lugarNacimiento.
+
+  // Métodos de apoyo
   obtenerValores(data: any, propiedad: string): string[] {
     const entityKey = Object.keys(data?.entities || {})[0];
     const claims = data?.entities?.[entityKey]?.claims?.[propiedad];
@@ -298,6 +291,15 @@ export class ApiService {
   obtenerValor(data: any, propiedad: string): string | null {
     const valores = this.obtenerValores(data, propiedad);
     return valores.length > 0 ? valores[0] : null;
+  }
+
+  normalizeName(name: string): string {
+    return name
+      .replace("Categoría:", "")     // Quita prefijos innecesarios
+      .replace(/\(científica\)\s*/i, "")  // Quita "(científica)" y los posibles espacios al final
+      .trim()                        // Quita espacios al inicio y final
+      .normalize("NFD")              // Descompone letras acentuadas (é → e +  ́)
+      .replace(/\s+/g, "_");         // Reemplaza todos los espacios por _
   }
  
 }

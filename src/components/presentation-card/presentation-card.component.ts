@@ -2,14 +2,17 @@ import { Component, Input , Output, EventEmitter} from '@angular/core';
 import { IonButton, IonImg ,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/angular/standalone';
 import { IonicModule } from '@ionic/angular'; 
 import { DatosGenio } from 'src/app/models/datos-genio';
+import { GalleryComponent } from '../gallery/gallery.component';
 
 @Component({
   selector: 'app-presentation-card',
   templateUrl: './presentation-card.component.html',
   styleUrls: ['./presentation-card.component.scss'],
-  imports: [IonButton, IonImg ,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonicModule],
+  imports: [IonButton, IonImg ,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonicModule,  GalleryComponent],
 })
 export class PresentationCardComponent {
+
+
 
   @Input() genius!: DatosGenio;
   @Input() name!: string;

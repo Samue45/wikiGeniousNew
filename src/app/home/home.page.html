@@ -20,14 +20,14 @@
   <app-gallery #gallery (geniusSelected)="onGeniusSelected($event)"></app-gallery>  
 
   <!-- Carta detallada (solo si hay un genio seleccionado) -->
-  <app-genius-card 
+  <app-presentation-card
   *ngIf="selectedGenius" 
   [name]="selectedGenius.name"
   [photoUrl]="selectedGenius.photoUrl"
-  [category]="selectedGenius.category"
+  [works]="selectedGenius.category"
   [achievements]="selectedGenius.achievements"
   [studies]="selectedGenius.studies"
   (close)="selectedGenius = null">
-  </app-genius-card>
+  </app-presentation-card>
 </ion-content>
 

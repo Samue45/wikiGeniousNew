@@ -1,5 +1,5 @@
 export interface DatosGenio {
-    category: string[];
+    works: string[];
     studies: string[];
     achievements: string[];
     birthday: string | null;

@@ -16,9 +16,8 @@ import { GeniousCategory } from 'src/app/models/GeniousCategory ';
 })
 export class GalleryComponent  implements OnInit {
 
-  // Usamos un solo array de objetos para contener tanto el nombre como la foto
-  private geniousData: { name: string, category: number, photoUrl: string | null }[] = [];
-  private filteredGeniousData: { name: string, category: number, photoUrl: string | null }[] = [];
+  private geniusData: { name: string, category: number, photoUrl: string | null }[] = [];
+  private filteredGeniusData: { name: string, category: number, photoUrl: string | null }[] = [];
   
   constructor(private apiService : ApiService) {}
 
@@ -88,13 +87,13 @@ export class GalleryComponent  implements OnInit {
       next: (photos) => {
 
         // Combinamos los nombres con las fotos
-        this.geniousData = allNames.map((genio, index) => ({
+        this.geniusData = allNames.map((genio, index) => ({
           name: genio.name,
           category: genio.category,
           photoUrl: photos[index] || null
         }));
 
-        this.filteredGeniousData = [...this.geniousData]; // Inicializamos el array para filtrar los genios
+        this.filteredGeniusData = [...this.geniusData]; // Inicializamos el array para filtrar los genios
       },
       error: (err) => {
         console.log('Hubo un error al obtener las fotos:', err);
@@ -115,7 +114,7 @@ export class GalleryComponent  implements OnInit {
     const categoryEnum = categoryEnumMap[category.toUpperCase()] ?? GeniousCategory.Todos;
   
     // Aplicar el filtro sobre los genios
-    this.filteredGeniousData = this.geniousData.filter(genio => {
+    this.filteredGeniusData = this.geniusData.filter(genio => {
       const matchesCategory = categoryEnum === GeniousCategory.Todos || genio.category === categoryEnum;
       const matchesName = !lowerSearch || genio.name.toLowerCase().startsWith(lowerSearch);
   
@@ -126,11 +125,11 @@ export class GalleryComponent  implements OnInit {
   
   // Métodos para acceder a los datos
   getGeniousData() {
-    return this.geniousData;
+    return this.geniusData;
   }
 
   getGeniousDataByName(){
-    return this.filteredGeniousData;
+    return this.filteredGeniusData;
   }
 
 
