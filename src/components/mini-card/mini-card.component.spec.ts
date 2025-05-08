@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MiniCardGeniousComponent } from './mini-card-genious.component';
+import { MiniCardComponent } from './mini-card.component';
 
-describe('MiniCardGeniousComponent', () => {
-  let component: MiniCardGeniousComponent;
-  let fixture: ComponentFixture<MiniCardGeniousComponent>;
+describe('MiniCardComponent', () => {
+  let component: MiniCardComponent;
+  let fixture: ComponentFixture<MiniCardComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MiniCardGeniousComponent ],
+      declarations: [ MiniCardComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MiniCardGeniousComponent);
+    fixture = TestBed.createComponent(MiniCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

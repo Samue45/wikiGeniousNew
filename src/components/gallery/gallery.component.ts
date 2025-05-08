@@ -5,14 +5,14 @@ import { of } from 'rxjs';
 import { NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
-import { MiniCardGeniousComponent } from '../mini-card-genious/mini-card-genious.component';
+import { MiniCardComponent } from '../mini-card/mini-card.component';
 import { GeniousCategory } from 'src/app/models/GeniousCategory ';
 
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
-  imports : [NgFor, CommonModule , IonHeader, IonToolbar, IonTitle,  IonGrid, IonRow, IonCol , MiniCardGeniousComponent]
+  imports : [NgFor, CommonModule , IonHeader, IonToolbar, IonTitle,  IonGrid, IonRow, IonCol , MiniCardComponent]
 })
 export class GalleryComponent  implements OnInit {
 
