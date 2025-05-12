@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter , OnInit} from '@angular/core';
 import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 
@@ -9,14 +9,19 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [IonLabel, IonSegment, IonSegmentButton, FormsModule],
 })
-export class SegmentButtonComponent {
+export class SegmentButtonComponent implements OnInit {
 
-  textoCategory: string = '';
+  textoCategory: string = 'TODOS';
 
   @Output() categorySelected = new EventEmitter<string>();
 
+  ngOnInit() {
+    this.categorySelected.emit(this.textoCategory);
+  }
+
   onSearchChange(event: any) {
-    const valor = event.detail.value.normalize("NFD").toUpperCase(); // Normalizamos y pasamos a MAYÚSCULAS
+    const valor = event.detail.value;
+    
     this.categorySelected.emit(valor);
   }
 

@@ -1,12 +1,11 @@
+import { GeniusService } from 'src/app/services/genius.service';
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from 'src/app/services/api.service';
-import { catchError, forkJoin, map } from 'rxjs';
-import { of } from 'rxjs';
 import { NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
 import { MiniCardComponent } from '../mini-card/mini-card.component';
-import { GeniusCategory } from 'src/app/models/GeniusCategory ';
+import { GeniusesCategory } from 'src/app/models/Geniuses-category';
+import { Category } from 'src/app/models/category';
 
 @Component({
   selector: 'app-gallery',
@@ -16,125 +15,65 @@ import { GeniusCategory } from 'src/app/models/GeniusCategory ';
 })
 export class GalleryComponent  implements OnInit {
 
-  private geniusData: { name: string, category: number, photoUrl: string | null }[] = [];
-  private filteredGeniusData: { name: string, category: number, photoUrl: string | null }[] = [];
   
-  constructor(private apiService : ApiService) {}
+  constructor(private geniusService : GeniusService) {}
+
+  private Geniuses: GeniusesCategory = {
+    [Category.Math] : [],
+    [Category.Physic] : [],
+    [Category.Informatic] : []
+  } 
+  // Lista con los genios filtrados
+  public filteredGeniuses : any [] = [];
+
+  // Variable con el valor de la categoría
+  public selectedCategory : string = 'TODOS';
 
   ngOnInit() {
     // Con este método obtenemos todas las URL asociadas a cada foto de cada genio y sus nombres
-    this.getAllPhotosAndNames();
+    this.loadAllGeniuses();
+
   }
 
-  getAllPhotosAndNames() {
-    this.getListNames().subscribe({
-      next: ({ math, physic, informatic }) => {
-        // Procesamos los nombres, y después obtenemos las fotos
-        const allNames = [
-          ...math.map(genious => ({
-            ...genious,
-            name: genious.name.replace("Categoría:", "").trim()
-          })),
-          ...physic.map(genious => ({
-            ...genious,
-            name: genious.name.replace("Categoría:", "").trim()
-          })),
-          ...informatic.map(genious => ({
-            ...genious,
-            name: genious.name.replace("Categoría:", "").trim()
-          }))
-        ];
-
-        // Ahora obtenemos las fotos
-        this.getPhotos(allNames);
+  loadAllGeniuses() : void {
+    this.geniusService.getFilteredGeniuses().subscribe({
+      next: (data) => {
+        this.Geniuses = data;
+        this.searchGeniousByNameAndCategory();
+        console.log('Datos de los genios cargados con éxito');
       },
       error: (err) => {
-        console.error('Error al obtener los nombres de los genios:', err);
+        console.log('Hubo un error a cargar los genios del servicio de genios');
+        alert('Hubo un error a cargar los genios del servicio de genios');
+      },
+      complete: () => {
+        console.log('Carga de genios completada.');
       }
     });
   }
 
-  getListNames() {
-    // Hacemos solicitudes simultáneas para obtener los nombres de los genios
-    return forkJoin({
-      math: this.apiService.getNamesMathGenius(),
-      physic: this.apiService.getNamesPhysicGenius(),
-      informatic: this.apiService.getNamesInformaticGenius()
-    }).pipe(
-      catchError((err) => {
-        console.error('Error al obtener los nombres:', err);
-        return of({ math: [], physic: [], informatic: [] }); // En caso de error, devolvemos arrays vacíos
-      })
-    );
+
+  searchGeniousByNameAndCategory(nameSearch: string = '', category: string = 'TODOS') {
+    this.selectedCategory = category; // 🔄 Actualizamos la categoría seleccionada
+    this.applyFilter(nameSearch);
   }
 
-  getPhotos(allNames: { name: string; category: number }[]) {
-    // Si no hay nombres, salimos de la función
-    if (allNames.length === 0) {
-      console.log('No hay nombres para cargar fotos');
-      return;
-    }
-
-    // Creamos los observables para obtener las fotos de los genios
-    const arrayObservable = allNames.map((genio) =>
-      this.apiService.getImage(genio.name).pipe(
-        catchError((err) => {
-          console.log('Error al obtener la foto del genio:', genio.name, err);
-          return of(null); // Si hay error, devolvemos null
-        })
-      )
-    );
-
-    // Esperamos que todas las solicitudes se resuelvan usando forkJoin
-    forkJoin(arrayObservable).subscribe({
-      next: (photos) => {
-
-        // Combinamos los nombres con las fotos
-        this.geniusData = allNames.map((genio, index) => ({
-          name: genio.name,
-          category: genio.category,
-          photoUrl: photos[index] || null
-        }));
-
-        this.filteredGeniusData = [...this.geniusData]; // Inicializamos el array para filtrar los genios
-      },
-      error: (err) => {
-        console.log('Hubo un error al obtener las fotos:', err);
-      }
-    });
-  }
-
-  searchGeniousByNameAndCategory(nameSearch: string = '', category: string = 'TODOS'){
+  applyFilter(nameSearch : string = ''){
     const lowerSearch = nameSearch.toLowerCase();
 
-    // Mapeo de las categorías
-    const categoryEnumMap: Record<string, GeniusCategory>  = {
-      "MATEMATICOS": GeniusCategory.Math,
-      "FISICOS": GeniusCategory.Physic,
-      "INFORMATICAS": GeniusCategory.Informatic
-    };
-  
-    const categoryEnum = categoryEnumMap[category.toUpperCase()] ?? GeniusCategory.Todos;
-  
-    // Aplicar el filtro sobre los genios
-    this.filteredGeniusData = this.geniusData.filter(genio => {
-      const matchesCategory = categoryEnum === GeniusCategory.Todos || genio.category === categoryEnum;
-      const matchesName = !lowerSearch || genio.name.toLowerCase().startsWith(lowerSearch);
-  
-      return matchesCategory && matchesName;
-    });
-  
-  }
-  
-  // Métodos para acceder a los datos
-  getGeniousData() {
-    return this.geniusData;
-  }
-
-  getGeniousDataByName(){
-    return this.filteredGeniusData;
+    if(this.selectedCategory === 'TODOS'){
+      this.filteredGeniuses = [
+        ...this.Geniuses[Category.Math],
+        ...this.Geniuses[Category.Physic],
+        ...this.Geniuses[Category.Informatic],
+      ].filter(genius => genius.name.toLocaleLowerCase().startsWith(lowerSearch));
+    }else {
+      this.filteredGeniuses = this.Geniuses[this.selectedCategory as Category].filter(genio =>
+        genio.name.toLowerCase().includes(lowerSearch)
+      );
+    }
   }
 
 
-  
+
 }

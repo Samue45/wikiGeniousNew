@@ -1,26 +1,23 @@
-import { Component ,ViewChild } from '@angular/core';
+import { Component ,ViewChild} from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
 import { AfterViewInit } from '@angular/core';
 import { GalleryComponent } from 'src/components/gallery/gallery.component';
 import { NavComponent } from 'src/components/nav/nav.component';
 import { SegmentButtonComponent } from 'src/components/segment-button/segment-button.component';
-import { PresentationCardComponent } from 'src/components/presentation-card/presentation-card.component';
-import { Genius } from '../models/Genius';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, GalleryComponent, NavComponent, SegmentButtonComponent, PresentationCardComponent],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, GalleryComponent, NavComponent, SegmentButtonComponent],
 
 })
 export class HomePage implements AfterViewInit {
 
   @ViewChild('gallery') gallery!: GalleryComponent;
-  selectedGenius: Genius | null = null;
   
   searchText: string = '';
-  categoryText: string = '';
+  categoryText: string = 'TODOS';
 
   
   constructor() { }
@@ -44,14 +41,13 @@ export class HomePage implements AfterViewInit {
   updateFilter() {
     // Comprobación para evitar errores si aún no se ha inicializado
     if (this.gallery) {
-      this.gallery.searchGeniousByNameAndCategory(this.searchText, this.categoryText);
-    }
+      try {
+        this.gallery.searchGeniousByNameAndCategory(this.searchText, this.categoryText);
+        console.log(`Filtrando: Nombre -> ${this.searchText}, Categoría -> ${this.categoryText}`);
+      } catch (error) {
+        console.error('Error al actualizar el filtro:', error);
+      }    }
   }
 
-  
-  // Método que se ejecuta cuando seleccionas un genio en la galería
-  onGeniusSelected(genius: Genius) {
-    this.selectedGenius = genius;
-  }
 
 }

@@ -3,9 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Genius } from '../models/Genius';
-import { GeniusCategory } from '../models/GeniusCategory ';
-
-
+import { forkJoin } from 'rxjs';
 
 
 @Injectable({
@@ -22,14 +20,15 @@ export class ApiService {
 // Endpoints del Servicio
 
 //Método genérico para obtener los nombres de los genios según categoría
-  getNamesByCategory(category: string, categoryId: GeniusCategory): Observable<Genius[]> {
+  getNamesByCategory(category: string, cmtype :string): Observable<Genius[]> {
     const params = new HttpParams()
       .set('action', 'query')
       .set('list', 'categorymembers')
       .set('cmtitle', category)
       .set('format', 'json')
-      .set('cmtype', 'subcat')
+      .set('cmtype', cmtype)
       .set('origin', '*');
+      
 
     return this.http.get<any>(this.baseURL, { params }).pipe(
       map(response => {
@@ -37,13 +36,13 @@ export class ApiService {
         return Array.isArray(categoryMembers)
           ? categoryMembers.map(member => ({
               name: member.title,
-              category: categoryId,
               photoURL: null,
               works: [],
               studies: [],
               achievements: [],
               birthday: null,
-              country: null
+              country: null,
+              summary : null,
             }))
           : [];
       }),
@@ -56,18 +55,29 @@ export class ApiService {
 
 //Métodos específicos para cada categoría
   getNamesMathGenius(): Observable<Genius[]> {
-    return this.getNamesByCategory('Category:Categorías_de_matemáticos', GeniusCategory.Math);
+    return this.getNamesByCategory('Category:Categorías de matemáticos', 'subcat');
   }
 
   getNamesPhysicGenius(): Observable<Genius[]> {
-    return this.getNamesByCategory('Category:Categorías_de_físicos', GeniusCategory.Physic);
+    return this.getNamesByCategory('Category:Categorías de físicos', 'subcat');
   }
 
   getNamesInformaticGenius(): Observable<Genius[]> {
-    return this.getNamesByCategory('Category:Pioneras_de_la_informática', GeniusCategory.Informatic);
+    return this.getNamesByCategory('Category:Pioneras de la informática', 'page');
   }
 
-
+  getAllGeniusesNames(): Observable<{ math: Genius[], physic: Genius[], informatic: Genius[] }> {
+    return forkJoin({
+      math: this.getNamesMathGenius(),
+      physic: this.getNamesPhysicGenius(),
+      informatic: this.getNamesInformaticGenius(),
+    }).pipe(
+      catchError(err => {
+        console.error('Error al obtener los nombres de los genios:', err);
+        return of({ math: [], physic: [], informatic: [] });
+      })
+    );
+  }
 
   getImage(name: string) : Observable<string | null> {
   //Se limpia el nombre de genios sustituyendo los espacios por _
@@ -140,14 +150,14 @@ getIdGenius(wikidataId: string, category: number = -1): Observable<Genius | null
   return this.http.get<any>(this.baseURL, { params }).pipe(
     map(data => {
       return {
-        name: "", // Aquí puedes ajustar el nombre si lo tienes previamente
+        name: "", 
         photoURL: null,
-        category, // 👈 Ahora incluimos el valor por defecto o el que se pase
         works: this.obtenerValores(data, 'P106'),
         studies: this.obtenerValores(data, 'P69'),
         achievements: this.obtenerValores(data, 'P166'),
         birthday: this.obtenerValor(data, 'P569'),
-        country: this.obtenerValor(data, 'P19')
+        country: this.obtenerValor(data, 'P19'),
+        summary : null,
       };
     }),
     catchError(err => {
@@ -175,7 +185,6 @@ getIdGenius(wikidataId: string, category: number = -1): Observable<Genius | null
     const valores = this.obtenerValores(data, propiedad);
     return valores.length > 0 ? valores[0] : null;
   }
-
   normalizeName(name: string): string {
     return name
       .replace("Categoría:", "")     // Quita prefijos innecesarios
