@@ -6,6 +6,7 @@ import { IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol } from '@ionic
 import { MiniCardComponent } from '../mini-card/mini-card.component';
 import { GeniusesCategory } from 'src/app/models/Geniuses-category';
 import { Category } from 'src/app/models/category';
+import { raceWith } from 'rxjs';
 
 @Component({
   selector: 'app-gallery',
@@ -62,16 +63,30 @@ export class GalleryComponent  implements OnInit {
     const lowerSearch = nameSearch.toLowerCase();
 
     if(this.selectedCategory === 'todos'){
-      this.filteredGeniuses = [
-        ...this.Geniuses[Category.Math],
-        ...this.Geniuses[Category.Physic],
-        ...this.Geniuses[Category.Informatic],
-      ].filter(genius => genius.name.toLocaleLowerCase().startsWith(lowerSearch));
+      
+      // 1º Creamos un array general con todos los genios
+      const allGeniuses = [
+      ...this.Geniuses[Category.Math],
+      ...this.Geniuses[Category.Physic],
+      ...this.Geniuses[Category.Informatic],
+      ];
 
-      console.log(this.Geniuses.math)
+      //2º Eliminamos duplicados
+      const seen = new Set<String>();
+      this.filteredGeniuses = allGeniuses.filter(genius => {
+        const key = genius.name;
+
+        if(seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+
+      // 3º Filtramos por el nombre
+      this.filteredGeniuses = this.filteredGeniuses.filter(genius => genius.name.toLowerCase().startsWith(lowerSearch));
+      
     }else {
       this.filteredGeniuses = this.Geniuses[this.selectedCategory as Category].filter(genio =>
-        genio.name.toLowerCase().includes(lowerSearch)
+        genio.name.toLowerCase().startsWith(lowerSearch)
       );
     }
   }
