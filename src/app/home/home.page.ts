@@ -17,7 +17,7 @@ export class HomePage implements AfterViewInit {
   @ViewChild('gallery') gallery!: GalleryComponent;
   
   searchText: string = '';
-  categoryText: string = 'TODOS';
+  categoryText: string = 'todos';
 
   
   constructor() { }

@@ -5,7 +5,6 @@ import { map, catchError } from 'rxjs/operators';
 import { Genius } from '../models/Genius';
 import { forkJoin } from 'rxjs';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -43,6 +42,7 @@ export class ApiService {
               birthday: null,
               country: null,
               summary : null,
+              category : null
             }))
           : [];
       }),
@@ -135,38 +135,6 @@ export class ApiService {
      })
    );
  }
-
-
-// Obtener datos adicionales por ID
-getIdGenius(wikidataId: string, category: number = -1): Observable<Genius | null> {
-  const params = new HttpParams()
-    .set('action', 'wbgetentities')
-    .set('ids', wikidataId)
-    .set('format', 'json')
-    .set('languages', 'es')
-    .set('props', 'claims')
-    .set('origin', '*');
-
-  return this.http.get<any>(this.baseURL, { params }).pipe(
-    map(data => {
-      return {
-        name: "", 
-        photoURL: null,
-        works: this.obtenerValores(data, 'P106'),
-        studies: this.obtenerValores(data, 'P69'),
-        achievements: this.obtenerValores(data, 'P166'),
-        birthday: this.obtenerValor(data, 'P569'),
-        country: this.obtenerValor(data, 'P19'),
-        summary : null,
-      };
-    }),
-    catchError(err => {
-      console.error('Error al obtener la información extra del genio por su ID:', err);
-      return of(null);
-    })
-  );
-}
-
 
 // Métodos de apoyo
   obtenerValores(data: any, propiedad: string): string[] {

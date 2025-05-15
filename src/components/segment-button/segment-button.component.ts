@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class SegmentButtonComponent implements OnInit {
 
-  textoCategory: string = 'TODOS';
+  textoCategory: string = 'todos';
 
   @Output() categorySelected = new EventEmitter<string>();
 

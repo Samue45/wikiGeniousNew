@@ -4,7 +4,7 @@ import { Genius } from '../models/Genius';
 import { Category } from '../models/category';
 import { GeniusesCategory } from '../models/Geniuses-category';
 import { Observable, of, BehaviorSubject, forkJoin } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -41,65 +41,66 @@ export class GeniusService {
   }
 
   // Solicitamos todos los datos de los genios y los guardamos en el objeto literal allGeniusesByCategory
-  loadAllGeniuses(): void {
-    // 1º Llamamos al servicio de la API para obtener los nombres de los genios
+  public loadAllGeniuses(): void {
     this.apiService.getAllGeniusesNames().pipe(
-      switchMap(({math, physic, informatic}) => {
+      // 1) Recibo { math, physic, informatic } con arrays de Genius (nombre + huecos)
+      switchMap(({ math, physic, informatic }) => {
+        // 2) Creo un array unificado con nombre y categoría
+        const tasks = [
+          ...math.map(g => ({ name: g.name, category: Category.Math })),
+          ...physic.map(g => ({ name: g.name, category: Category.Physic })),
+          ...informatic.map(g => ({ name: g.name, category: Category.Informatic })),
+        ];
 
-        // Para cada genio, obtenemos todos sus datos
-        const request = [...math, ...physic, ...informatic].map((genius) => {
-          return this.apiService.getIdGenius(genius.name).pipe(
-            switchMap((geniusData) => {
-
-              // Si obtenemos datos del genio , pedimos la imagen y el resumen
-              if(geniusData){
-                const photo$ = this.apiService.getImage(genius.name);
-                const summary$ = this.apiService.getSummary(genius.name);
-               
-               
-                // Hacemos una petición combinada
-                return forkJoin({photo : photo$, summary : summary$}).pipe(
-                  map(({photo, summary}) =>  ({
-                    ...geniusData,
-                    name : genius.name,
-                    photoURL : photo,
-                    summary : summary
-                  }))
-                );
-              }else {
-                return of(null) // Si no hay datos, devolvemos null
-              }
-            })
-          );
-        });
-
-        // Cuando todas la peticiones se completen, devolvemos los datos
-        return forkJoin(request).pipe(
-          map((geniuses : (Genius | null)[]) => {
-          // 1) Primero, filtramos los nulls con type predicate
-          const nonNull = geniuses.filter((g): g is Genius => g !== null);
-
-          // 2) Luego, filtramos por categoría usando el name original
-          const byMath       = nonNull.filter(g => math.some(m => m.name === g.name));
-          const byPhysic     = nonNull.filter(g => physic.some(p => p.name === g.name));
-          const byInformatic = nonNull.filter(g => informatic.some(i => i.name === g.name));
-
-          // 3) Por último, modificamos el formato del nombre de cada genio
-            this.allGeniusesByCategory[Category.Math] = byMath.filter(g => !!g && math.some(m => m.name === g!.name)).map( g => ({...g, name: this.normalizeName(g?.name)})) as Genius[];
-            this.allGeniusesByCategory[Category.Physic] = byPhysic.filter(g => !!g && physic.some(p => p.name === g!.name)).map( g => ({...g, name: this.normalizeName(g?.name )})) as Genius[];
-            this.allGeniusesByCategory[Category.Informatic] = byInformatic.filter(g => !!g && informatic.some(i => i.name === g!.name)).map( g => ({...g, name: this.normalizeName(g?.name )})) as Genius[];
-            
-            // Emitimos el nuevo estado al observable
-            this.filteredGeniuses$.next(this.allGeniusesByCategory);
-
-
-            return this.allGeniusesByCategory;
-          })
+        // 3) Por cada uno, disparo en paralelo image + summary
+        const detailCalls = tasks.map(item =>
+          forkJoin({
+            photoURL: this.apiService.getImage(item.name),
+            summary:  this.apiService.getSummary(item.name)
+          }).pipe(
+            map(({ photoURL, summary }) => ({
+              name: this.normalizeName(item.name),
+              photoURL,
+              summary,
+              category: item.category
+            } as Genius))
+          )
         );
+
+        // 4) Espero a que todos los detailCalls terminen
+        return forkJoin(detailCalls);
       }),
+      // 5) Agrupo el array resultante por categoría
+      map((allGeniuses: Genius[]) => {
+        const byCat: GeniusesCategory = {
+          [Category.Math]: [],
+          [Category.Physic]: [],
+          [Category.Informatic]: []
+        };
+        // 1) Elimino cualquier Genius con category null
+        const valid = allGeniuses.filter((g): g is Genius & { category: Category } =>
+          g.category !== null
+        );
+        valid.forEach(g => {
+          byCat[g.category].push(g);
+        });
+        return byCat;
+      }),
+      // 6) Emito efecto secundario en mi BehaviorSubject
+      tap(byCat => {
+        this.allGeniusesByCategory = byCat;
+        this.filteredGeniuses$.next(byCat);
+      }),
+      // 7) Manejo de errores
       catchError(err => {
-        console.error('Error al cargar los datos de los genios:', err);
-        return of(this.allGeniusesByCategory);
+        console.error('Error al cargar genios:', err);
+        const empty: GeniusesCategory = {
+          [Category.Math]: [],
+          [Category.Physic]: [],
+          [Category.Informatic]: []
+        };
+        this.filteredGeniuses$.next(empty);
+        return of(empty);
       })
     ).subscribe();
   }

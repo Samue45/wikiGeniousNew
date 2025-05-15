@@ -27,7 +27,7 @@ export class GalleryComponent  implements OnInit {
   public filteredGeniuses : any [] = [];
 
   // Variable con el valor de la categoría
-  public selectedCategory : string = 'TODOS';
+  public selectedCategory : string = 'todos';
 
   ngOnInit() {
     // Con este método obtenemos todas las URL asociadas a cada foto de cada genio y sus nombres
@@ -53,7 +53,7 @@ export class GalleryComponent  implements OnInit {
   }
 
 
-  searchGeniousByNameAndCategory(nameSearch: string = '', category: string = 'TODOS') {
+  searchGeniousByNameAndCategory(nameSearch: string = '', category: string = 'todos') {
     this.selectedCategory = category; // 🔄 Actualizamos la categoría seleccionada
     this.applyFilter(nameSearch);
   }
@@ -61,12 +61,14 @@ export class GalleryComponent  implements OnInit {
   applyFilter(nameSearch : string = ''){
     const lowerSearch = nameSearch.toLowerCase();
 
-    if(this.selectedCategory === 'TODOS'){
+    if(this.selectedCategory === 'todos'){
       this.filteredGeniuses = [
         ...this.Geniuses[Category.Math],
         ...this.Geniuses[Category.Physic],
         ...this.Geniuses[Category.Informatic],
       ].filter(genius => genius.name.toLocaleLowerCase().startsWith(lowerSearch));
+
+      console.log(this.Geniuses.math)
     }else {
       this.filteredGeniuses = this.Geniuses[this.selectedCategory as Category].filter(genio =>
         genio.name.toLowerCase().includes(lowerSearch)
