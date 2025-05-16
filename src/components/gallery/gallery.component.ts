@@ -22,7 +22,12 @@ export class GalleryComponent  implements OnInit {
   private Geniuses: GeniusesCategory = {
     [Category.Math] : [],
     [Category.Physic] : [],
-    [Category.Informatic] : []
+    [Category.Informatic] : [],
+    [Category.Philosophers]: [],
+    [Category.Biologists]: [],
+    [Category.Biochemicals]: [],
+    [Category.Deaf]: []
+
   } 
   // Lista con los genios filtrados
   public filteredGeniuses : any [] = [];
@@ -69,6 +74,11 @@ export class GalleryComponent  implements OnInit {
       ...this.Geniuses[Category.Math],
       ...this.Geniuses[Category.Physic],
       ...this.Geniuses[Category.Informatic],
+      ...this.Geniuses[Category.Philosophers],
+      ...this.Geniuses[Category.Biologists],
+      ...this.Geniuses[Category.Biochemicals],
+      ...this.Geniuses[Category.Deaf],
+      
       ];
 
       //2º Eliminamos duplicados

@@ -36,11 +36,6 @@ export class ApiService {
           ? categoryMembers.map(member => ({
               name: member.title,
               photoURL: null,
-              works: [],
-              studies: [],
-              achievements: [],
-              birthday: null,
-              country: null,
               summary : null,
               category : null
             }))
@@ -66,15 +61,51 @@ export class ApiService {
     return this.getNamesByCategory('Category:Pioneras de la informática', 'page');
   }
 
-  getAllGeniusesNames(): Observable<{ math: Genius[], physic: Genius[], informatic: Genius[] }> {
+  getNamesPhilosophersGenius(): Observable<Genius[]> {
+    return this.getNamesByCategory('Category:Filósofas', 'page');
+  }
+
+  getNamesBiologistsGenius(): Observable<Genius[]> {
+    return this.getNamesByCategory('Category:Biólogos', 'page');
+  }
+
+  getNamesBiochemicalsGenius(): Observable<Genius[]> {
+    return this.getNamesByCategory('Category:Bioquímicos', 'page');
+  }
+
+  getNamesDeafScientistsGenius(): Observable<Genius[]> {
+    return this.getNamesByCategory('Category:Científicos sordos', 'page');
+  }
+
+ public getAllGeniusesNames(): Observable<{
+    math: Genius[];
+    physic: Genius[];
+    informatic: Genius[];
+    philosophers: Genius[];
+    biologists: Genius[];
+    biochemicals: Genius[];
+    deaf: Genius[];
+  }> {
     return forkJoin({
       math: this.getNamesMathGenius(),
       physic: this.getNamesPhysicGenius(),
       informatic: this.getNamesInformaticGenius(),
+      philosophers: this.getNamesPhilosophersGenius(),
+      biologists: this.getNamesBiologistsGenius(),
+      biochemicals: this.getNamesBiochemicalsGenius(),
+      deaf: this.getNamesDeafScientistsGenius(),
     }).pipe(
       catchError(err => {
         console.error('Error al obtener los nombres de los genios:', err);
-        return of({ math: [], physic: [], informatic: [] });
+        return of({
+          math: [],
+          physic: [],
+          informatic: [],
+          philosophers: [],
+          biologists: [],
+          biochemicals: [],
+          deaf: []
+        });
       })
     );
   }

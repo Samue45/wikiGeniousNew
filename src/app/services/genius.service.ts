@@ -6,57 +6,70 @@ import { GeniusesCategory } from '../models/Geniuses-category';
 import { Observable, of, BehaviorSubject, forkJoin } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class GeniusService {
 
-  constructor(private apiService : ApiService) {
+  constructor(private apiService: ApiService) {
     this.getAllGeniuses();
   }
 
-  // Lista para guardar todos los genios solicitados a la API de mediaWiki
+  // Lista para guardar todos los genios solicitados a la API de MediaWiki
   private allGeniusesByCategory: GeniusesCategory = {
-    [Category.Math] : [],
-    [Category.Physic] : [],
-    [Category.Informatic] : []
-  } 
+    [Category.Math]: [],
+    [Category.Physic]: [],
+    [Category.Informatic]: [],
+    [Category.Philosophers]: [],
+    [Category.Biologists]: [],
+    [Category.Biochemicals]: [],
+    [Category.Deaf]: []
+  };
+
   private filteredGeniuses$: BehaviorSubject<GeniusesCategory> = new BehaviorSubject<GeniusesCategory>({
     [Category.Math]: [],
     [Category.Physic]: [],
-    [Category.Informatic]: []
+    [Category.Informatic]: [],
+    [Category.Philosophers]: [],
+    [Category.Biologists]: [],
+    [Category.Biochemicals]: [],
+    [Category.Deaf]: []
   });
   
-  // Se encarga de llamar automáticamente a la API si el objeto literal allGeniusesByCategory está vacío
+  // Llama automáticamente a la API si no se ha cargado nada aún
   getAllGeniuses(): void {
-    if(!this.isDataLoaded()){
+    if (!this.isDataLoaded()) {
       this.loadAllGeniuses();
     }
   }
 
-  isDataLoaded() : boolean {
-    // Devuelve true si en TODAS las lista de genios hay por lo menos 1
-    return Object.values(this.allGeniusesByCategory).some((categoryList) => categoryList.length > 0);
+  private isDataLoaded(): boolean {
+    // True si al menos una lista de genios tiene elementos
+    return Object.values(this.allGeniusesByCategory)
+      .some(categoryList => categoryList.length > 0);
   }
 
-  // Solicitamos todos los datos de los genios y los guardamos en el objeto literal allGeniusesByCategory
+  // Carga todas las categorías de genios y guarda en allGeniusesByCategory
   public loadAllGeniuses(): void {
     this.apiService.getAllGeniusesNames().pipe(
-      // 1) Recibo { math, physic, informatic } con arrays de Genius (nombre + huecos)
-      switchMap(({ math, physic, informatic }) => {
-        // 2) Creo un array unificado con nombre y categoría
-        const tasks = [
-          ...math.map(g => ({ name: g.name, category: Category.Math })),
-          ...physic.map(g => ({ name: g.name, category: Category.Physic })),
-          ...informatic.map(g => ({ name: g.name, category: Category.Informatic })),
-        ];
+      // 1) Recibe un objeto con arrays por categoría
+      switchMap(({ math, physic, informatic, philosophers, biologists, biochemicals, deaf }) => {
+        // 2) Combina todos los nombres en un solo array con categoría
+       const tasks = [
+        ...math.map(g => ({ name: g.name, category: Category.Math })),
+        ...physic.map(g => ({ name: g.name, category: Category.Physic })),
+        ...informatic.map(g => ({ name: g.name, category: Category.Informatic })),
+        ...philosophers.map(g => ({ name: g.name, category: Category.Philosophers })),
+        ...biologists.map(g => ({ name: g.name, category: Category.Biologists })),
+        ...biochemicals.map(g => ({ name: g.name, category: Category.Biochemicals })),
+        ...deaf.map(g => ({ name: g.name, category: Category.Deaf })),
+       ];
 
-        // 3) Por cada uno, disparo en paralelo image + summary
+        // 3) Para cada genio, fetch de imagen y resumen en paralelo
         const detailCalls = tasks.map(item =>
           forkJoin({
-            photoURL: this.apiService.getImage(item.name),
-            summary:  this.apiService.getSummary(item.name)
+            photoURL: this.apiService.getImage(item.name ),
+            summary: this.apiService.getSummary(item.name)
           }).pipe(
             map(({ photoURL, summary }) => ({
               name: this.normalizeName(item.name),
@@ -67,26 +80,29 @@ export class GeniusService {
           )
         );
 
-        // 4) Espero a que todos los detailCalls terminen
+        // 4) Espera a todas las llamadas de detalle
         return forkJoin(detailCalls);
       }),
-      // 5) Agrupo el array resultante por categoría
+      // 5) Agrupa por categoría
       map((allGeniuses: Genius[]) => {
         const byCat: GeniusesCategory = {
           [Category.Math]: [],
           [Category.Physic]: [],
-          [Category.Informatic]: []
+          [Category.Informatic]: [],
+          [Category.Philosophers]: [],
+          [Category.Biologists]: [],
+          [Category.Biochemicals]: [],
+          [Category.Deaf]: []
         };
-        // 1) Elimino cualquier Genius con category null
-        const valid = allGeniuses.filter((g): g is Genius & { category: Category } =>
-          g.category !== null
-        );
-        valid.forEach(g => {
-          byCat[g.category].push(g);
-        });
+
+        allGeniuses
+          // filtra solo objetos con categoría válida
+          .filter((g): g is Genius & { category: Category } => g.category != null)
+          .forEach(g => byCat[g.category].push(g));
+
         return byCat;
       }),
-      // 6) Emito efecto secundario en mi BehaviorSubject
+      // 6) Actualiza subject y caché interno
       tap(byCat => {
         this.allGeniusesByCategory = byCat;
         this.filteredGeniuses$.next(byCat);
@@ -97,7 +113,11 @@ export class GeniusService {
         const empty: GeniusesCategory = {
           [Category.Math]: [],
           [Category.Physic]: [],
-          [Category.Informatic]: []
+          [Category.Informatic]: [],
+          [Category.Philosophers]: [],
+          [Category.Biologists]: [],
+          [Category.Biochemicals]: [],
+          [Category.Deaf]: []
         };
         this.filteredGeniuses$.next(empty);
         return of(empty);
@@ -105,15 +125,16 @@ export class GeniusService {
     ).subscribe();
   }
 
+  // Devuelve observable con categorías filtradas
   getFilteredGeniuses(): Observable<GeniusesCategory> {
     return this.filteredGeniuses$.asObservable();
   }
 
+  // Normaliza el nombre quitando prefijos y sufijos
   private normalizeName(name: string): string {
     return name
-      .replace("Categoría:", "")     // Quita prefijos innecesarios
-      .replace(/\(científica\)\s*/i, "")  // Quita "(científica)" y los posibles espacios al final
-      .trim()                        // Quita espacios al inicio y final
+      .replace(/^Categoría:/i, '')
+      .replace(/\(científica\)/i, '')
+      .trim();
   }
-  
 }
