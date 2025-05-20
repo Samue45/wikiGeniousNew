@@ -1,12 +1,11 @@
-<ion-card>
+<ion-card button  (click) = "onClick()" class="genius-image">
   <div class="photo-wrapper">
-    <img 
-      [src]="photoUrl || 'assets/sin-foto.jpg'" 
-      alt="{{ name }}" 
-    />
+      <ion-img 
+       [src]="genius.photoURL || 'assets/sin-foto.jpg'"
+       alt="{{ genius.name }}"></ion-img>
   </div>
   <ion-card-header>
-    <ion-card-title>{{ name }}</ion-card-title>
+    <ion-card-title>{{ genius.name }}</ion-card-title>
   </ion-card-header>
 </ion-card>
 

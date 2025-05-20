@@ -1,12 +1,13 @@
 import { GeniusService } from 'src/app/services/genius.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit , Output} from '@angular/core';
 import { NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
 import { MiniCardComponent } from '../mini-card/mini-card.component';
 import { GeniusesCategory } from 'src/app/models/Geniuses-category';
 import { Category } from 'src/app/models/category';
-import { raceWith } from 'rxjs';
+import { Genius } from 'src/app/models/Genius';
+
 
 @Component({
   selector: 'app-gallery',
@@ -18,6 +19,8 @@ export class GalleryComponent  implements OnInit {
 
   
   constructor(private geniusService : GeniusService) {}
+
+  @Output() geniusSelected =  new EventEmitter<Genius>();
 
   private Geniuses: GeniusesCategory = {
     [Category.Math] : [],
@@ -101,6 +104,9 @@ export class GalleryComponent  implements OnInit {
     }
   }
 
+  onSelectGenius(genius: Genius) {
+    this.geniusSelected.emit(genius);
+  }
 
 
 }

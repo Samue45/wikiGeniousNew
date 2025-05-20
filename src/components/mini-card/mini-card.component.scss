@@ -2,7 +2,7 @@
     width: 100%;
     height: 400px;
     overflow: hidden;
-  }
+}
   
 .photo-wrapper img {
     width: 100%;
@@ -10,5 +10,26 @@
     object-fit: cover;
     object-position: center;
     display: block;
-  }
+}
+.genius-image {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  cursor: pointer; /* cambia el cursor al pasar */
+}
+
+:host {
+  display: block;      /* Asegura que todo el componente sea clicable */
+  cursor: pointer;     /* Muestra la mano al pasar por encima */
+}
+
+ion-card {
+  /* Opcional: un ligero efecto al pasar */
+  transition: transform 0.2s;
+}
+
+ion-card:hover {
+  transform: scale(1.02);
+}
+
   

@@ -16,5 +16,13 @@
     <app-segment-button (categorySelected)="onCategorySearch($event)"></app-segment-button> 
   </div>
 
-  <app-gallery #gallery></app-gallery>  
+  <app-gallery #gallery (geniusSelected)="onGeniusSelected($event)" ></app-gallery>
+  
+  
+  <app-presentation-card
+    *ngIf="selectedGenius"
+    [genius]="selectedGenius"
+    (close)="selectedGenius = null">
+  </app-presentation-card>
+  
 </ion-content>

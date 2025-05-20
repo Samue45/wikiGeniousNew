@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { Genius } from 'src/app/models/Genius';
 
 @Component({
   selector: 'app-mini-card',
@@ -10,9 +11,11 @@ import { IonicModule } from '@ionic/angular';
 })
 export class MiniCardComponent  {
 
-  @Input() photoUrl: string | null = '';
-  @Input() name: string = '';
+  @Input() genius!: Genius;                       // recibimos el objeto completo
+  @Output() selected = new EventEmitter<Genius>(); // emitimos el objeto completo
 
-  constructor() {}
+  onClick() {
+    this.selected.emit(this.genius);
+  }
 
 }

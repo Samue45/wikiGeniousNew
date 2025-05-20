@@ -9,7 +9,10 @@
       <!-- Usamos *ngFor para recorrer el array de geniousData -->
       <ion-col size="6" size-md="4" *ngFor="let genius of filteredGeniuses">
         <!-- Aquí agregamos el componente 'mini-card-genious' para cada genio -->
-        <app-mini-card [photoUrl]="genius.photoURL" [name]="genius.name"></app-mini-card>
+          <app-mini-card
+            [genius]="genius"
+            (selected)="onSelectGenius($event)">
+          </app-mini-card>
       </ion-col>
     </ion-row>
 </ion-grid>

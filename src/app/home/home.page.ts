@@ -1,16 +1,25 @@
-import { Component ,ViewChild} from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
-import { AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { GalleryComponent } from 'src/components/gallery/gallery.component';
 import { NavComponent } from 'src/components/nav/nav.component';
 import { SegmentButtonComponent } from 'src/components/segment-button/segment-button.component';
+import { PresentationCardComponent } from 'src/components/presentation-card/presentation-card.component';
+import { Genius } from '../models/Genius';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, GalleryComponent, NavComponent, SegmentButtonComponent],
-
+  imports: [
+    CommonModule,           // para *ngIf, *ngFor…
+    IonicModule,          
+    GalleryComponent,
+    NavComponent,
+    SegmentButtonComponent,
+    PresentationCardComponent
+  ]
 })
 export class HomePage implements AfterViewInit {
 
@@ -18,14 +27,24 @@ export class HomePage implements AfterViewInit {
   
   searchText: string = '';
   categoryText: string = 'todos';
-
+  selectedGenius: Genius | null = null;
   
-  constructor() { }
+  constructor(private modalCtrl: ModalController) {}
 
 
   ngAfterViewInit() {
     // Aquí puedes acceder al DOM después de que el componente se haya renderizado completamente.
     this.updateFilter();
+  }
+
+  async onGeniusSelected(genius: Genius) {
+    const modal = await this.modalCtrl.create({
+      component: PresentationCardComponent,
+      componentProps: { genius }
+    });
+    await modal.present();
+    // hasta que el usuario cierre el modal, no vuelve aquí
+    await modal.onDidDismiss();
   }
 
   onTextSearch(text: string) {
