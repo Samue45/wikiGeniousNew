@@ -140,8 +140,6 @@ export class ApiService {
   }
 
   getSummary(name :string) : Observable<string | null> {
-    //Se limpia el nombre de genios sustituyendo los espacios por _
-    const title = encodeURIComponent(name);
 
     // Parámetros esenciales de la URL
     const params = new HttpParams()
@@ -150,7 +148,7 @@ export class ApiService {
     .set('prop', 'extracts')
     .set('exintro', 'true')       // solo el primer párrafo
     .set('explaintext', 'true')   // sin HTML
-    .set('titles', title)
+    .set('titles', name)
     .set('origin', '*');
 
    // Petición HTTP
