@@ -40,7 +40,8 @@ export class HomePage implements AfterViewInit {
   async onGeniusSelected(genius: Genius) {
     const modal = await this.modalCtrl.create({
       component: PresentationCardComponent,
-      componentProps: { genius }
+      componentProps: { genius },
+      cssClass: 'presentation-modal'
     });
     await modal.present();
     // hasta que el usuario cierre el modal, no vuelve aquí

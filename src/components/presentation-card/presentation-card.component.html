@@ -1,24 +1,19 @@
 <ion-card>
-  <ion-img 
+  <img 
    [src]="genius.photoURL || 'assets/sin-foto.jpg'" 
    alt="{{ genius?.name }}" 
    class="genius-image"
-   loading ="lazy">
-  </ion-img>
+   loading ="lazy"/>
 
-  <ion-card-header>
-    <ion-card-title>{{ genius?.name }}</ion-card-title>
-  </ion-card-header>
 
-  <ion-card-content>
-    <p><strong>Historia:</strong></p>
-    <p>{{genius.summary || 'Resumen del genio no disponible 😢'}}</p>
+  <div class="card-details">
+    <ion-card-header>
+      <ion-card-title>{{ genius.name }}</ion-card-title>
+    </ion-card-header>
 
-  </ion-card-content>
-
-  <ion-card-content slot="footer">
-      <ion-button expand="full" color="danger" (click)="closeCard()">
-        Cerrar
-      </ion-button>
-  </ion-card-content>
+    <ion-card-content>
+      <p><strong>Historia:</strong></p>
+      <p>{{ genius.summary || 'Resumen del genio no disponible 😢' }}</p>
+    </ion-card-content>
+  </div>
 </ion-card>

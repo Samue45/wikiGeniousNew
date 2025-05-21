@@ -35,3 +35,12 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+
+// Estilo CSS para el modal que muestra la carte de presentación para cada genio
+.presentation-modal{
+  --width: 90vw;
+  --height: 90vh;
+  --max-width: 1000px;
+  --max-height: 800px;
+}
