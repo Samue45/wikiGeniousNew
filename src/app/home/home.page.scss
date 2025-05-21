@@ -1,29 +1,26 @@
-/* Contenedor para el logo y título */
 ion-toolbar {
   display: flex;
-  align-items: center; /* Centra verticalmente los elementos dentro de la barra */
-  justify-content: flex-start; /* Alinea los elementos hacia la izquierda */
+  align-items: center;    /* Centra verticalmente logo y título */
+  padding: 0 16px;        /* Espacio lateral */
 }
 
-/* Contenedor de la imagen (logo) */
 .logo-container {
   display: flex;
-  align-items: center; /* Centra verticalmente el logo */
-  margin-right: 15px;  /* Espacio entre el logo y el título */
+  align-items: center;
+  margin-right: 12px;     /* Espacio entre logo y título */
 }
 
-/* Estilo para la imagen (logo) */
 .logo {
-  width: 50px; /* Puedes ajustar el tamaño del logo aquí */
-  height: 50px; /* Mantén las proporciones del logo */
+  width: 64px;            /* Nuevo tamaño más grande */
+  height: 64px;           /* Igual al ancho para mantener proporción */
+  object-fit: contain;    /* Evita deformar la imagen */
 }
 
-/* Estilo para el título */
 ion-title {
-  display: flex;
-  align-items: center; /* Centra verticalmente el título */
-  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  font-size: 1.5rem;      /* Aumenta un poco el tamaño del texto */
+  white-space: nowrap;    /* No se parta en varias líneas */
 }
+
 
 /* Si quieres alinear el contenido dentro de #container */
 #container {

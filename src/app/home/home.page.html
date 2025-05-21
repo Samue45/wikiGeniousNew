@@ -2,19 +2,22 @@
   <ion-toolbar>
     <div class="logo-container">
       <img src="assets/logo.png" alt="Logo" class="logo" />
+      
+      <ion-title>
+      WikiGeniuses
+      </ion-title>
     </div>
 
-    <ion-title>
-      WikiGenious
-    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="navigation-container">
     <app-nav (textoBuscado)="onTextSearch($event)"></app-nav> 
-    <app-segment-button (categorySelected)="onCategorySearch($event)"></app-segment-button> 
   </div>
+
+  <app-segment-button (categorySelected)="onCategorySearch($event)"></app-segment-button> 
+
 
   <app-gallery #gallery (geniusSelected)="onGeniusSelected($event)" ></app-gallery>
   
