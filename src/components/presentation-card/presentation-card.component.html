@@ -10,10 +10,10 @@
     <ion-card-header>
       <ion-card-title>{{ genius.name }}</ion-card-title>
     </ion-card-header>
-
-    <ion-card-content>
-      <p><strong>Historia:</strong></p>
-      <p>{{ genius.summary || 'Resumen del genio no disponible 😢' }}</p>
+      
+    <ion-card-content #scrollArea class="card-scrollable ion-padding">
+        <p><strong>Historia:</strong></p>
+        <p>{{ genius.summary || 'Resumen del genio no disponible 😢' }}</p>
     </ion-card-content>
   </div>
 </ion-card>

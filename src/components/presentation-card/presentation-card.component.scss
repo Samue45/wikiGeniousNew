@@ -1,4 +1,4 @@
-/* presentation-card.component.scss */
+
 ion-card {
   display: flex;
   flex-direction: row;
@@ -32,12 +32,12 @@ ion-card {
   flex: 1;                 /* ocupa todo el espacio restante */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* para separar header y footer si lo hay */
+  justify-content: space-between; 
   padding: 15px;
 }
 
 ion-card-header {
-  padding: 0;              /* ya está en .card-details */
+  padding: 0;            
   margin-bottom: 10px;
   background: transparent;
 }
@@ -54,4 +54,10 @@ ion-card-content {
   p {
     margin: 0 0 1em;
   }
+}
+.card-scrollable {
+  flex: 1;               
+  min-height: 0;       
+  overflow-y: auto;     
+  -webkit-overflow-scrolling: touch; 
 }
