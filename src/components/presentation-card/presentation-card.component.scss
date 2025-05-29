@@ -1,63 +1,71 @@
-
 ion-card {
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 100%;
-  margin: 0;               /* que ocupe todo el modal */
+  margin: 0;
   border-radius: 0;
   overflow: hidden;
   box-shadow: none;
 
-  @media (max-width: 768px) {
+  // tablet / small desktop
+  @media (max-width: 757px) {
     flex-direction: column;
     height: auto;
+  }
+
+  // móviles pequeños
+  @media (max-width: 576px) {
+    padding: 0;
   }
 }
 
 .genius-image {
-  flex: 0 0 40%;           /* ocupa el 40% del ancho, no crece ni encoge */
+  flex: 0 0 40%;
+  width: 50%;           // mejor usar 100% para que llenen siempre su contenedor
   height: auto;
-  width: 50%;
   object-fit: cover;
+  aspect-ratio: 4 / 3;   // mantiene la proporción
 
-  @media (max-width: 568px) {
+  @media (max-width: 757px) {
     flex: 0 0 auto;
-    width: 50%;
-    border-right: none;
+    width: 100%;
+    aspect-ratio: auto;  // deja que la altura se ajuste al contenido
   }
 }
 
 .card-details {
-  flex: 1;                 /* ocupa todo el espacio restante */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
-  padding: 15px;
+  justify-content: space-between;
+  padding: 1rem;         // unidades relativas
 }
 
 ion-card-header {
-  padding: 0;            
-  margin-bottom: 10px;
+  padding: 0;
+  margin-bottom: .5rem;
   background: transparent;
 }
 
 ion-card-title {
-  font-size: 1.2rem;
-  margin: 0 0 10px;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);  // tamaño fluido
+  margin: 0 0 .5rem;
 }
 
 ion-card-content {
-  flex: 1;                 /* para que el párrafo principal ocupe el espacio */
+  flex: 1;
   padding: 0;
 
   p {
     margin: 0 0 1em;
   }
 }
+
 .card-scrollable {
-  flex: 1;               
-  min-height: 0;       
-  overflow-y: auto;     
-  -webkit-overflow-scrolling: touch; 
+  max-height: calc(100vh - 200px);
+  flex: 1;
+  min-height: 0;         // esencial para scroll en flex
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }

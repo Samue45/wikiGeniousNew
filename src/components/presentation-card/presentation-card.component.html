@@ -6,14 +6,15 @@
    loading ="lazy"/>
 
 
-  <div class="card-details">
+  <ion-content (ionScroll)="onScroll($event)" [scrollEvents]="true"  class="card-details">
     <ion-card-header>
       <ion-card-title>{{ genius.name }}</ion-card-title>
     </ion-card-header>
       
-    <ion-card-content #scrollArea class="card-scrollable ion-padding">
+    <ion-card-content #scrollArea class="card-scrollable ion-padding" >
         <p><strong>Historia:</strong></p>
         <p>{{ genius.summary || 'Resumen del genio no disponible 😢' }}</p>
     </ion-card-content>
-  </div>
+  </ion-content>
+
 </ion-card>
