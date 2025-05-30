@@ -7,6 +7,7 @@ ion-card {
   border-radius: 0;
   overflow: hidden;
   box-shadow: none;
+  
 
   // tablet / small desktop
   @media (max-width: 757px) {
@@ -49,18 +50,21 @@ ion-card-header {
 }
 
 ion-card-title {
-  font-size: clamp(1rem, 2.5vw, 1.5rem);  // tamaño fluido
+  font-size: 30px;  // tamaño fluido
   margin: 0 0 .5rem;
+  padding: 10px;
 }
 
 ion-card-content {
   flex: 1;
   padding: 0;
-
+  font-size: 20px;
   p {
-    margin: 0 0 1em;
+    font-size: 15px;
+    margin: 10px;
   }
 }
+
 
 .card-scrollable {
   max-height: calc(100vh - 200px);
